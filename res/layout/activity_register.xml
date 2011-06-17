@@ -6,16 +6,16 @@
 	<LinearLayout android:orientation="vertical"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
 		android:layout_gravity="bottom">
-		<TextView android:id="@+id/output" android:layout_width="fill_parent"
-			android:text="@string/use_otherSite_id" android:layout_height="wrap_content"
+		<TextView android:layout_width="fill_parent"
+			android:text="@string/reg_use_otherSite_id" android:layout_height="wrap_content"
 			android:layout_marginTop="20dip" android:textSize="18sp" />
 		<TableLayout android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:layout_gravity="center"
 			android:stretchColumns="*">
 			<TableRow>
-				<Button android:id="@+id/use_weibo_id" android:text="@string/use_weibo_id" />
-				<Button android:id="@+id/use_renren_id" android:text="@string/use_renren_id" />
-				<TextView />
+				<Button android:id="@+id/reg_use_weibo_id" android:text="@string/reg_use_weibo_id" />
+				<Button android:id="@+id/reg_use_renren_id" android:text="@string/reg_use_renren_id" />
+				<TextView /> <!-- just for padding -->
 				<TextView />
 				<TextView />
 				<TextView />
@@ -28,14 +28,18 @@
 	<LinearLayout android:orientation="vertical"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
 		android:layout_gravity="top">
-		<TextView android:text="@string/input_login_id"
+		<TextView android:text="@string/reg_input_login_id"
 			android:layout_gravity="center" android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:layout_marginTop="20dip"
 			android:textSize="18sp" />
 		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:id="@+id/login_id" />
-		<Button android:id="@+id/set_login_id" android:text="@string/confirm"
+			android:layout_height="wrap_content" android:id="@+id/reg_login_id" />
+		<Button android:id="@+id/reg_set_login_id" android:text="@string/confirm"
 			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+		<TextView android:id="@+id/reg_error_info" android:layout_gravity="center"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:layout_marginTop="20dip" android:layout_marginLeft="20dip"
+			android:textSize="15sp" />
 	</LinearLayout>
 
 </LinearLayout>
