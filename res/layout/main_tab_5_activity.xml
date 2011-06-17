@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/background" android:layout_height="fill_parent"
+	android:layout_width="fill_parent" android:orientation="vertical">
+
+
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_gravity="top">
+		<TextView android:text="@string/main_tab_5"
+			android:layout_gravity="center" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_marginBottom="25dip"
+			android:layout_marginTop="25dip" android:textSize="24.5sp" />
+		<Button android:id="@+id/clean_login_id" android:text="clean login id"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+	</LinearLayout>
+
+</LinearLayout>

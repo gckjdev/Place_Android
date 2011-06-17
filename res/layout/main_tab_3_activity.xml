@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/background" android:layout_height="fill_parent"
+	android:layout_width="fill_parent" android:orientation="vertical">
+
+	<LinearLayout android:orientation="horizontal"
+		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:background="#80A0C0">
+		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:stretchColumns="*">
+			<TableRow>
+				<Button android:text="@string/header_left_text"
+					android:layout_gravity="center" />
+				<TextView android:layout_gravity="center" />
+				<TextView android:text="@string/main_tab_1"
+					android:layout_gravity="center" />
+				<TextView android:layout_gravity="center" />
+				<TextView android:layout_gravity="center" />
+			</TableRow>
+		</TableLayout>
+	</LinearLayout>
+	
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_gravity="top">
+		<TextView android:text="@string/main_tab_3"
+			android:layout_gravity="center" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_marginBottom="25dip"
+			android:layout_marginTop="25dip" android:textSize="24.5sp" />
+	</LinearLayout>
+
+</LinearLayout>

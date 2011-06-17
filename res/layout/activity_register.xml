@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/background" android:layout_height="fill_parent"
+	android:layout_width="fill_parent" android:orientation="vertical">
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_gravity="bottom">
+		<TextView android:id="@+id/output" android:layout_width="fill_parent"
+			android:text="@string/use_otherSite_id" android:layout_height="wrap_content"
+			android:layout_marginTop="20dip" android:textSize="18sp" />
+		<TableLayout android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_gravity="center"
+			android:stretchColumns="*">
+			<TableRow>
+				<Button android:id="@+id/use_weibo_id" android:text="@string/use_weibo_id" />
+				<Button android:id="@+id/use_renren_id" android:text="@string/use_renren_id" />
+				<TextView />
+				<TextView />
+				<TextView />
+				<TextView />
+				<TextView />
+				<TextView />
+			</TableRow>
+		</TableLayout>
+	</LinearLayout>
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_gravity="top">
+		<TextView android:text="@string/input_login_id"
+			android:layout_gravity="center" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_marginTop="20dip"
+			android:textSize="18sp" />
+		<EditText android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:id="@+id/login_id" />
+		<Button android:id="@+id/set_login_id" android:text="@string/confirm"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+	</LinearLayout>
+
+</LinearLayout>

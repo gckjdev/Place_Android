@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string-array
+    name="pings_refresh_interval_in_minutes_values">
+    <item>10</item>
+    <item>15</item>
+    <item>30</item>
+    <item>60</item>
+    <item>120</item>
+  </string-array>
+</resources>

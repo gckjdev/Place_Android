@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item type="id" name="screen">false</item>
+    <item type="id" name="left_text">false</item>
+    <item type="id" name="right_text">false</item>
+    <!-- 
+    <item type="id" name="left_text1">false</item>
+    <item type="id" name="icon">false</item>
+    <item type="id" name="day">false</item>
+    <item type="id" name="conditions">false</item>
+    <item type="id" name="high">false</item>
+    <item type="id" name="low">false</item>
+    <item type="id" name="scrollLayout">false</item>
+    <item type="id" name="ctrlLayout">false</item>
+    <item type="id" name="buttonLayout">false</item>
+    <item type="id" name="ok">false</item>
+    <item type="id" name="cancel">false</item>
+    <item type="id" name="text1">false</item>
+    <item type="id" name="statement_btn_agree">false</item>
+    <item type="id" name="statement_btn_exit">false</item>
+    <item type="id" name="left_text_button">false</item>
+    <item type="id" name="toast_scrview">false</item>
+    <item type="id" name="toast_view">false</item>
+    <item type="id" name="widgetlin">false</item>
+    <item type="id" name="appname">false</item>
+    <item type="id" name="info">false</item>
+    <item type="id" name="widget_list">false</item>
+    <item type="id" name="widget_login">false</item>
+    <item type="id" name="widget_register">false</item>
+    <item type="id" name="name">false</item>
+    <item type="id" name="price">false</item>
+    <item type="id" name="zhangdie">false</item>
+    <item type="id" name="zhangfu">false</item>
+    -->
+</resources>
