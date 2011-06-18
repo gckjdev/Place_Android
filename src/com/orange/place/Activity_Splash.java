@@ -17,7 +17,7 @@ public class Activity_Splash extends Activity {
 		// set a event, so splash could finish in some period
 		(new Handler()).postDelayed(new Runnable() {
 			public void run() {
-				startActivity(new Intent(getApplication(), Activity_Register.class));
+				startActivity(new Intent(getApplication(), Activity_Registration.class));
 				Activity_Splash.this.finish();
 			}
 		}, 500);

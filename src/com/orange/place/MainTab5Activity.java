@@ -10,8 +10,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.orange.place.common.Constants;
 import com.orange.place.constant.DBConstants;
+import com.orange.place.constants.Constants;
 
 public class MainTab5Activity extends Activity {
 
