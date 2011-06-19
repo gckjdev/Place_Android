@@ -14,7 +14,7 @@ import com.orange.utils.ActivityUtil;
 
 public class Activity_Registration extends Activity {
 
-	private Button bSetLoginId;
+	private Button bRegister;
 	private Button bUseWeiboId;
 	private Button bUseRenrenId;
 	private TextView tRegErrorInfo;
@@ -35,7 +35,7 @@ public class Activity_Registration extends Activity {
 		ActivityUtil.setFullScreen(this);
 		setContentView(R.layout.activity_registration);
 		lookupViewElements();
-		setUserNameListener(bSetLoginId);
+		setRegisterListener();
 	}
 
 	private void startMainActivity() {
@@ -43,8 +43,8 @@ public class Activity_Registration extends Activity {
 		Activity_Registration.this.finish();
 	}
 
-	private void setUserNameListener(Button b) {
-		b.setOnClickListener(new View.OnClickListener() {
+	private void setRegisterListener() {
+		bRegister.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				String loginId = eLoginId.getText().toString();
@@ -63,7 +63,7 @@ public class Activity_Registration extends Activity {
 	}
 
 	private void lookupViewElements() {
-		bSetLoginId = (Button) findViewById(R.id.reg_set_login_id);
+		bRegister = (Button) findViewById(R.id.register);
 		bUseWeiboId = (Button) findViewById(R.id.reg_use_weibo_id);
 		bUseRenrenId = (Button) findViewById(R.id.reg_use_renren_id);
 		eLoginId = (EditText) findViewById(R.id.reg_login_id);

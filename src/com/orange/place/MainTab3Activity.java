@@ -1,5 +1,7 @@
 package com.orange.place;
 
+import com.orange.utils.ActivityUtil;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.Window;
@@ -12,9 +14,9 @@ public class MainTab3Activity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
-
-		getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+		ActivityUtil.setNoTitle(this);
+		ActivityUtil.setFullScreen(this);
 		setContentView(R.layout.main_tab_3_activity);
 	}
 }

@@ -1,5 +1,6 @@
 package com.orange.place.helper;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -30,6 +31,18 @@ public class JsonHelper {
 			}
 
 			return json.getJSONObject(ServiceConstant.RET_DATA);
+		} catch (JSONException e) {
+			return null;
+		}
+	}
+	
+	public static JSONArray getReturnDataArray(JSONObject json) {
+		try {
+			if (json == null || json.isNull(ServiceConstant.RET_DATA)) {
+				return null;
+			}
+			
+			return json.getJSONArray(ServiceConstant.RET_DATA);
 		} catch (JSONException e) {
 			return null;
 		}

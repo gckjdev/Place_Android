@@ -17,6 +17,10 @@ public class PrefHelper {
 	public static String getUserLoginId(Context context) {
 		return getPreference(context).getString(DBConstants.F_LOGINID, null);
 	}
+	
+	public static String getUserId(Context context){
+		return getPreference(context).getString(DBConstants.F_USERID, null);
+	}
 
 	public static SharedPreferences getPreference(Context context) {
 		return context.getSharedPreferences(Constants.PREF_NAME, Context.MODE_PRIVATE);

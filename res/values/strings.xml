@@ -14,6 +14,9 @@
 	
 	<string name="for_dev_only">开发调试使用！</string>
 	
+	<string name="refresh">刷新</string>
+	<string name="go_back">返回</string>
+	<string name="place_lst">地盘列表 </string>
 	
 	<string name="header_left_text">左边</string>
 	<string name="header_right_text">右边</string>
@@ -22,8 +25,6 @@
 	<string name="main_tab_3">我</string>
 	<string name="main_tab_4">邀请</string>
 	<string name="main_tab_5">反馈</string>
-	<string name="title_tab_1">地盘帖子列表   </string> <!-- the blank is for adjust the position of text -->
-	<string name="go_back">返回</string>
 	<string name="around">周边</string>
 	<string name="follow">关注</string>
 	<string name="me">我</string>

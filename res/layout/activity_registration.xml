@@ -6,9 +6,9 @@
 	<LinearLayout android:orientation="vertical"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
 		android:layout_gravity="bottom">
-		<TextView android:layout_width="fill_parent"
-			android:text="@string/reg_use_otherSite_id" android:layout_height="wrap_content"
-			android:layout_marginTop="20dip" android:textSize="18sp" />
+		<TextView android:layout_width="fill_parent" android:text="@string/reg_use_otherSite_id"
+			android:layout_height="wrap_content" android:layout_marginTop="20dip"
+			android:textSize="18sp" />
 		<TableLayout android:layout_height="wrap_content"
 			android:layout_width="wrap_content" android:layout_gravity="center"
 			android:stretchColumns="*">
@@ -34,12 +34,12 @@
 			android:textSize="18sp" />
 		<EditText android:layout_width="fill_parent"
 			android:layout_height="wrap_content" android:id="@+id/reg_login_id" />
-		<Button android:id="@+id/reg_set_login_id" android:text="@string/confirm"
+		<Button android:id="@+id/register" android:text="@string/confirm"
 			android:layout_width="wrap_content" android:layout_height="wrap_content" />
-		<TextView android:id="@+id/reg_error_info" android:layout_gravity="center"
-			android:layout_height="wrap_content" android:layout_width="wrap_content"
-			android:layout_marginTop="20dip" android:layout_marginLeft="20dip"
-			android:textSize="15sp" />
+		<TextView android:id="@+id/reg_error_info"
+			android:layout_gravity="center" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_marginTop="20dip"
+			android:layout_marginLeft="20dip" android:textSize="15sp" />
 	</LinearLayout>
 
 </LinearLayout>

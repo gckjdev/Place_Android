@@ -7,6 +7,7 @@ import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TabHost;
 
+import com.orange.utils.ActivityUtil;
 import com.orange.utils.TabsUtil;
 import com.orange.utils.UiUtil;
 
@@ -18,8 +19,7 @@ public class Activity_Main extends TabActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		// requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
-		requestWindowFeature(Window.FEATURE_NO_TITLE);
+		ActivityUtil.setNoTitle(this);
 		setContentView(R.layout.activity_main);
 		initTabHost();
 	}

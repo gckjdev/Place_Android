@@ -45,4 +45,20 @@ public class UriHelper {
 		Log.d(Constants.LOG_TAG, "Created uri for registration: " + uri.toString());
 		return uri;
 	}
+	
+	public static Uri createGetNearbyPlaceUri(String userId, double longtitude, double latitude) {
+		Builder uriBase = getHttpBaseUriBuilder();
+		
+		//uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETUSERFOLLOWPLACE);
+		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETNEARBYPLACE);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_LONGTITUDE, String.valueOf(longtitude));
+		uriBase.appendQueryParameter(ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
+		
+		Uri uri = uriBase.build();
+		Log.d(Constants.LOG_TAG, "Created uri for getNearbyPlace: " + uri.toString());
+		return uri;
+		
+	}
 }
