@@ -14,6 +14,8 @@
 			android:layout_width="wrap_content" android:layout_height="wrap_content" />
 		<Button android:id="@+id/query_place_list" android:text="query place list"
 			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+		<Button android:id="@+id/cleanup_place_list" android:text="cleanup place list"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" />
 	</LinearLayout>
 
 </LinearLayout>

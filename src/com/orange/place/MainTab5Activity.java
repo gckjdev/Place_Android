@@ -54,5 +54,14 @@ public class MainTab5Activity extends Activity {
 				}
 			}
 		});
+		
+		Button bCleanupPlaceList = (Button) findViewById(R.id.cleanup_place_list);
+		bCleanupPlaceList.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(MainTab5Activity.this);
+				sqlLiteHelper.cleanupPlaceList();
+			}
+		});
 	}
 }

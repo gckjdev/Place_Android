@@ -1,4 +1,4 @@
-package com.orange.place.services;
+package com.orange.place.tasks;
 
 import org.json.JSONObject;
 
@@ -12,7 +12,7 @@ import com.orange.place.helper.UriHelper;
 import com.orange.utils.HttpUtils;
 import com.orange.utils.SystemUtil;
 
-public class UserService {
+public class UserTask {
 
 	public static int deviceLogin(Context context) {
 		Uri deviceLoginUri = UriHelper.createDeviceLoginUri(SystemUtil.getDeviceId(context));

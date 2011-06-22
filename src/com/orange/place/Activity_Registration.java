@@ -9,7 +9,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.orange.place.constant.ErrorCode;
-import com.orange.place.services.UserService;
+import com.orange.place.tasks.UserTask;
 import com.orange.utils.ActivityUtil;
 
 public class Activity_Registration extends Activity {
@@ -24,7 +24,7 @@ public class Activity_Registration extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (UserService.isRegistered(this)) {
+		if (UserTask.isRegistered(this)) {
 			startMainActivity();
 			this.finish();
 			return;
@@ -50,7 +50,7 @@ public class Activity_Registration extends Activity {
 				String loginId = eLoginId.getText().toString();
 				// TODO validate the input
 
-				int resultCode = UserService.registerUser(Activity_Registration.this, loginId);
+				int resultCode = UserTask.registerUser(Activity_Registration.this, loginId);
 				if (resultCode == ErrorCode.ERROR_SUCCESS) {
 					startMainActivity();
 				} else if (resultCode == ErrorCode.ERROR_DEVICEID_BIND) {

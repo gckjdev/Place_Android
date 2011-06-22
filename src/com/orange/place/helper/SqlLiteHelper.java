@@ -20,7 +20,7 @@ import com.orange.utils.JsonUtil;
 
 public class SqlLiteHelper extends SQLiteOpenHelper {
 
-	// private static final String SQL_CREATE_PLACE_PLACE = "CREATE TABLE IF NOT EXISTS "
+	private static final String SQL_CLEANUP_PLACE_PLACE = "DELETE FROM " + Constants.TABLE_PLACE_PLACE + ";";
 	private static final String SQL_CREATE_PLACE_PLACE = "CREATE TABLE " + Constants.TABLE_PLACE_PLACE + " (" //
 			+ DBConstants.F_PLACEID + " TEXT PRIMARY KEY, " //
 			+ DBConstants.F_CREATE_DATE + " TEXT, " //
@@ -84,6 +84,10 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 
 		Cursor c = queryBuilder.query(getDatabase(), null, null, null, null, null, null);
 		return c;
+	}
+
+	public void cleanupPlaceList() {
+		getDatabase().execSQL(SQL_CLEANUP_PLACE_PLACE);
 	}
 
 	private SQLiteDatabase getDatabase() {
