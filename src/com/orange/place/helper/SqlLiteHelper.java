@@ -13,7 +13,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
-import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
@@ -27,8 +26,8 @@ import com.orange.utils.JsonUtil;
 
 public class SqlLiteHelper extends SQLiteOpenHelper {
 
-	private static final String SQL_CLEANUP_PLACE_PLACE = "DELETE FROM " + Constants.TABLE_PLACE_PLACE + ";";
-	private static final String SQL_CREATE_PLACE_PLACE = "CREATE TABLE " + Constants.TABLE_PLACE_PLACE + " (" //
+	private static final String SQL_CLEANUP_NEARBY_PLACE = "DELETE FROM " + Constants.TABLE_NEARBY_PLACE + ";";
+	private static final String SQL_CREATE_NEARBY_PLACE = "CREATE TABLE " + Constants.TABLE_NEARBY_PLACE + " (" //
 			+ DBConstants.F_PLACEID + " TEXT PRIMARY KEY, " //
 			+ DBConstants.F_CREATE_DATE + " TEXT, " //
 			+ DBConstants.F_RADIUS + " TEXT, " //
@@ -50,7 +49,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		Log.v(Constants.LOG_TAG, "Creating database");
 		try {
-			db.execSQL(SqlLiteHelper.SQL_CREATE_PLACE_PLACE);
+			db.execSQL(SqlLiteHelper.SQL_CREATE_NEARBY_PLACE);
 		} catch (SQLException e) {
 			Log.e(Constants.LOG_TAG, "Get SQL exception!", e);
 		}
@@ -70,32 +69,37 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		Log.v(Constants.LOG_TAG, "Opening database");
 	}
 
-	public void storePlaceList(Context context, JSONArray jsonArr) {
-		// context.openOrCreateDatabase(Constants.SQLITE_DB_NAME, Context.MODE_PRIVATE, null);
-
+	public int storeNearbyPlaceList(JSONArray jsonArr) {
 		int len = jsonArr.length();
+		if (len <= 0 ) {
+			Log.w(Constants.LOG_TAG, "No data found for DB store, will just ignore!");
+			return Constants.ERROR_RESP_DATA_EMPTY;
+		}
+		
 		ContentValues cv = null;
+		cleanupNearbyPlace(); // only keep the latest data
 		for (int i = 0; i < len; i++) {
 			try {
 				cv = createCVForPlace((JSONObject) jsonArr.get(i));
-				getDatabase().insert(Constants.TABLE_PLACE_PLACE, null, cv);
+				getDatabase().insert(Constants.TABLE_NEARBY_PLACE, null, cv);
 			} catch (JSONException e) {
 				Log.e(Constants.LOG_TAG, "Storing data error!", e);
-			} catch (SQLiteConstraintException e) {
-				Log.w(Constants.LOG_TAG, "Place already in DB");
-			}
+				return Constants.ERROR_SQLITE;
+			} 
 		}
+		return Constants.ERROR_UNKOWN;
 	}
 
-	public void cleanupPlaceList() {
-		getDatabase().execSQL(SQL_CLEANUP_PLACE_PLACE);
+	public void cleanupNearbyPlace() {
+		Log.d(Constants.LOG_TAG, "Cleanup nearby places in DB.");
+		getDatabase().execSQL(SQL_CLEANUP_NEARBY_PLACE);
 	}
 
 	public void updatePlaceList(List<Map<String, Object>> list) {
 		List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
 		Map<String, Object> place = new HashMap<String, Object>();
 
-		Cursor cur = queryPlaceList();
+		Cursor cur = queryNearbyPlace();
 		while (cur.moveToNext()) {
 			place.put(DBConstants.F_PLACEID, cur.getString(cur.getColumnIndex(DBConstants.F_PLACEID)));
 			place.put(DBConstants.F_CREATE_DATE, cur.getString(cur.getColumnIndex(DBConstants.F_CREATE_DATE)));
@@ -106,7 +110,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 			place.put(DBConstants.F_LATITUDE, cur.getString(cur.getColumnIndex(DBConstants.F_LATITUDE)));
 			place.put(DBConstants.F_LONGITUDE, cur.getString(cur.getColumnIndex(DBConstants.F_LONGITUDE)));
 			place.put(DBConstants.F_USERID, cur.getString(cur.getColumnIndex(DBConstants.F_USERID)));
-			place.put("PlaceImage", R.drawable.main_tab_4_nav_on); // change it !
+			place.put("PlaceImage", R.drawable.z_tmp_icon1); // change it !
 			tmpList.add(place);
 		}
 		cur.close();
@@ -119,9 +123,9 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		}
 	}
 
-	private Cursor queryPlaceList() {
+	private Cursor queryNearbyPlace() {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-		queryBuilder.setTables(Constants.TABLE_PLACE_PLACE);
+		queryBuilder.setTables(Constants.TABLE_NEARBY_PLACE);
 
 		Cursor cursor = queryBuilder.query(getDatabase(), null, null, null, null, null, null);
 		Log.d(Constants.LOG_TAG, "Get place list from DB. Amount: " + cursor.getCount());

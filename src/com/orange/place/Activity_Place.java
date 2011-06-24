@@ -34,7 +34,6 @@ public class Activity_Place extends BetterListActivity {
 
 	private List<Map<String, Object>> placeList = new ArrayList<Map<String, Object>>();
 	private SimpleAdapter placeListAdapter;
-	private Button bGoBack;
 	private Button bRefresh;
 
 	@Override
@@ -57,7 +56,7 @@ public class Activity_Place extends BetterListActivity {
 
 		ListView listView = getListView();
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView parent, View v, int position, long id) {
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
 				alertSelection(position);
 			}
 		});
@@ -78,20 +77,20 @@ public class Activity_Place extends BetterListActivity {
 				Log.d(Constants.LOG_TAG, "Get location: " + location);
 				// can not get location yet!
 
-				asyncGetPlaceList(location);
+				asyncGetNearbyPlaceList(location);
 			}
 		});
 	}
 
-	private void asyncGetPlaceList(Location location) {
-		AsyncGetPlaceListTask getPlaceListTask = new AsyncGetPlaceListTask(this);
+	private void asyncGetNearbyPlaceList(Location location) {
+		AsyncGetNearbyPlaceListTask getPlaceListTask = new AsyncGetNearbyPlaceListTask(this);
 		getPlaceListTask.setCallable(new AsyncGetPlaceListCallable());
 		getPlaceListTask.disableDialog();
 		getPlaceListTask.setLocation(location);
 		getPlaceListTask.execute();
 	}
 
-	private void updatePlaceListView() {
+	private void updateNearbyPlaceListView() {
 		updatePlaceList(placeList);
 		Log.w(Constants.LOG_TAG, "Updating place list view with place list: " + placeList);
 		placeListAdapter.notifyDataSetChanged();
@@ -102,10 +101,10 @@ public class Activity_Place extends BetterListActivity {
 		sqlLiteHelper.updatePlaceList(list);
 	}
 
-	private class AsyncGetPlaceListTask extends BetterAsyncTask<Void, Void, Integer> {
+	private class AsyncGetNearbyPlaceListTask extends BetterAsyncTask<Void, Void, Integer> {
 		private Location location;
 
-		public AsyncGetPlaceListTask(Context context) {
+		public AsyncGetNearbyPlaceListTask(Context context) {
 			super(context);
 		}
 
@@ -117,7 +116,7 @@ public class Activity_Place extends BetterListActivity {
 		@Override
 		protected void after(Context context, Integer taskResult) {
 			if (taskResult == ErrorCode.ERROR_SUCCESS) {
-				((Activity_Place) context).updatePlaceListView();
+				((Activity_Place) context).updateNearbyPlaceListView();
 			} else {
 				Log.w(Constants.LOG_TAG, "AsyncGetPlaceListTask failed, nothing need to update!");
 			}
@@ -135,9 +134,9 @@ public class Activity_Place extends BetterListActivity {
 	private class AsyncGetPlaceListCallable implements BetterAsyncTaskCallable<Void, Void, Integer> {
 		@Override
 		public Integer call(BetterAsyncTask<Void, Void, Integer> task) throws Exception {
-			int resultCode = Constants.ERROR_RESP_UNKOWN;
-			Location location = ((AsyncGetPlaceListTask) task).getLocation();
-			resultCode = PlaceTask.getPlaceList(Activity_Place.this, location);
+			int resultCode = Constants.ERROR_UNKOWN;
+			Location location = ((AsyncGetNearbyPlaceListTask) task).getLocation();
+			resultCode = PlaceTask.getNearbyPlaceList(Activity_Place.this, location);
 			return resultCode;
 		}
 	}
@@ -153,6 +152,5 @@ public class Activity_Place extends BetterListActivity {
 
 	private void lookupViewElements() {
 		bRefresh = (Button) findViewById(R.id.refresh);
-		bGoBack = (Button) findViewById(R.id.go_back);
 	}
 }

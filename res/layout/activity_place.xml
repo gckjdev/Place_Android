@@ -5,32 +5,33 @@
 
 	<RelativeLayout android:gravity="center_vertical"
 		android:layout_gravity="top" android:background="@drawable/title_lightgray_bg"
-		android:layout_width="fill_parent" android:layout_height="45dip"
-		xmlns:android="http://schemas.android.com/apk/res/android">
+		android:layout_width="fill_parent" android:layout_height="45dip">
 		<LinearLayout android:gravity="center"
+			android:layout_marginLeft="100dip" android:layout_marginRight="100dip"
 			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
-			android:layout_marginLeft="16dip" android:layout_alignParentLeft="true"
-			android:orientation="horizontal" android:layout_width="50dip"
+			android:orientation="horizontal" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
-			<Button  android:id="@+id/go_back" android:textSize="12sp" android:textColor="#FFFFFF"
-				android:background="@drawable/title_button" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:text="@string/go_back"
-				android:gravity="center" android:layout_centerVertical="true" />
+			<Button android:textSize="12sp" android:textColor="#FFFFFF"
+				android:background="@drawable/title_button_group_left"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/place_around" android:layout_weight="1.0"
+				android:focusableInTouchMode="true" />
+			<Button android:textSize="12sp" android:textColor="#FFFFFF"
+				android:background="@drawable/title_button_group_right"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/place_followed" android:layout_weight="1.0"
+				android:focusableInTouchMode="true" />
 		</LinearLayout>
-		<TextView android:text="@string/place_lst"
-			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:layout_gravity="center" android:textSize="18sp"
-			android:layout_centerInParent="true" android:textColor="#FFFFFF"
-			android:textStyle="bold" />
 		<LinearLayout android:gravity="center"
 			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
 			android:layout_marginRight="16dip" android:layout_alignParentRight="true"
-			android:orientation="horizontal" android:layout_width="50dip"
+			android:orientation="horizontal" android:layout_width="40dip"
 			android:layout_height="wrap_content">
-			<Button android:id="@+id/refresh" android:textSize="12sp" android:textColor="#FFFFFF"
-				android:background="@drawable/title_button" android:layout_width="fill_parent"
-				android:layout_height="fill_parent" android:text="@string/refresh"
-				android:gravity="center" android:layout_centerVertical="true" />
+			<Button android:id="@+id/refresh" android:textSize="12sp"
+				android:textColor="#FFFFFF" android:background="@drawable/title_button"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:text="@string/refresh" android:gravity="center"
+				android:layout_centerVertical="true" />
 		</LinearLayout>
 	</RelativeLayout>
 
@@ -38,7 +39,7 @@
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
 		android:layout_gravity="top">
 		<ListView android:id="@android:id/list" android:layout_width="fill_parent"
-			android:layout_height="fill_parent" android:dividerHeight="3dip" />
+			android:layout_height="fill_parent" android:dividerHeight="1.5dp" />
 	</LinearLayout>
 
 </LinearLayout>

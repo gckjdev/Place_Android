@@ -40,7 +40,6 @@ public class Activity_Registration extends Activity {
 
 	private void startMainActivity() {
 		startActivity(new Intent(getApplication(), Activity_Main.class));
-		Activity_Registration.this.finish();
 	}
 
 	private void setRegisterListener() {

@@ -11,19 +11,19 @@
 			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
 			android:orientation="horizontal" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
-			<Button android:textSize="11.0sp" android:textColor="#FFFFFF"
+			<Button android:textSize="12sp" android:textColor="#FFFFFF"
 				android:background="@drawable/title_button_group_left"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:text="@string/around" android:layout_weight="1.0" />
-			<Button android:textSize="11.0sp" android:textColor="#FFFFFF"
+			<Button android:textSize="12sp" android:textColor="#FFFFFF"
 				android:background="@drawable/title_button_group_middle"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:text="@string/follow" android:layout_weight="1.0" />
-			<Button android:textSize="11.0sp" android:textColor="#FFFFFF"
+			<Button android:textSize="12sp" android:textColor="#FFFFFF"
 				android:background="@drawable/title_button_group_middle"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:text="@string/me" android:layout_weight="1.0" />
-			<Button android:textSize="11.0sp" android:textColor="#FFFFFF"
+			<Button android:textSize="12sp" android:textColor="#FFFFFF"
 				android:background="@drawable/title_button_group_right"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
 				android:text="@string/private_msg" android:layout_weight="1.0" />

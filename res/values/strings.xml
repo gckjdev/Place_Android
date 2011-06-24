@@ -16,7 +16,9 @@
 	
 	<string name="refresh">刷新</string>
 	<string name="go_back">返回</string>
-	<string name="place_lst">地盘列表 </string>
+	<string name="place_list">地盘列表 </string>
+	<string name="place_around">周边地盘 </string>
+	<string name="place_followed">我的关注 </string>
 	
 	<string name="header_left_text">左边</string>
 	<string name="header_right_text">右边</string>

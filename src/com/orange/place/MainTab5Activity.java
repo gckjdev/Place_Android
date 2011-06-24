@@ -60,7 +60,7 @@ public class MainTab5Activity extends Activity {
 			@Override
 			public void onClick(View v) {
 				SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(MainTab5Activity.this);
-				sqlLiteHelper.cleanupPlaceList();
+				sqlLiteHelper.cleanupNearbyPlace();
 			}
 		});
 	}

@@ -3,24 +3,38 @@
 	android:background="@color/background" android:layout_height="fill_parent"
 	android:layout_width="fill_parent" android:orientation="vertical">
 
-	<LinearLayout android:orientation="horizontal"
-		android:layout_height="wrap_content" android:layout_width="wrap_content"
-		android:background="#80A0C0">
-		<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	<RelativeLayout android:gravity="center_vertical"
+		android:layout_gravity="top" android:background="@drawable/title_lightgray_bg"
+		android:layout_width="fill_parent" android:layout_height="45dip"
+		xmlns:android="http://schemas.android.com/apk/res/android">
+		<LinearLayout android:gravity="center"
+			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
+			android:layout_marginLeft="16dip" android:layout_alignParentLeft="true"
+			android:orientation="horizontal" android:layout_width="50dip"
+			android:layout_height="wrap_content">
+			<Button android:id="@+id/TODO" android:textSize="12sp"
+				android:textColor="#FFFFFF" android:background="@drawable/title_button"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:text="@string/go_back" android:gravity="center"
+				android:layout_centerVertical="true" />
+		</LinearLayout>
+		<TextView android:text="@string/place_list"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
-			android:stretchColumns="*">
-			<TableRow>
-				<Button android:text="@string/header_left_text"
-					android:layout_gravity="center" />
-				<TextView android:layout_gravity="center" />
-				<TextView android:text="@string/main_tab_1"
-					android:layout_gravity="center" />
-				<TextView android:layout_gravity="center" />
-				<TextView android:layout_gravity="center" />
-			</TableRow>
-		</TableLayout>
-	</LinearLayout>
-	
+			android:layout_gravity="center" android:textSize="18sp"
+			android:layout_centerInParent="true" android:textColor="#FFFFFF"
+			android:textStyle="bold" />
+		<LinearLayout android:gravity="center"
+			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
+			android:layout_marginRight="16dip" android:layout_alignParentRight="true"
+			android:orientation="horizontal" android:layout_width="50dip"
+			android:layout_height="wrap_content">
+			<Button android:id="@+id/TODO" android:textSize="12sp"
+				android:textColor="#FFFFFF" android:background="@drawable/title_button"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:text="@string/refresh" android:gravity="center"
+				android:layout_centerVertical="true" />
+		</LinearLayout>
+	</RelativeLayout>
 
 	<LinearLayout android:orientation="vertical"
 		android:layout_height="wrap_content" android:layout_width="fill_parent"
