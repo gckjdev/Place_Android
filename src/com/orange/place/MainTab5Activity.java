@@ -41,17 +41,17 @@ public class MainTab5Activity extends Activity {
 		bQueryPlaceList.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(MainTab5Activity.this);
-				Cursor cur = sqlLiteHelper.queryPlaceList();
-				Log.d(Constants.LOG_TAG, "Get resoult count: " + cur.getCount());
-				while(cur.moveToNext()){
-					int nameColumn = cur.getColumnIndex(DBConstants.F_NAME);
-					int idColumn = cur.getColumnIndex(DBConstants.F_PLACEID);
-					String name = cur.getString(nameColumn);
-					String id = cur.getString(idColumn);
-					Log.d(Constants.LOG_TAG, "cursor=" + cur);
-					Log.d(Constants.LOG_TAG, "Name=" + name + ", id=" + id);
-				}
+//				SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(MainTab5Activity.this);
+//				Cursor cur = sqlLiteHelper.queryPlaceList();
+//				Log.d(Constants.LOG_TAG, "Get resoult count: " + cur.getCount());
+//				while(cur.moveToNext()){
+//					int nameColumn = cur.getColumnIndex(DBConstants.F_NAME);
+//					int idColumn = cur.getColumnIndex(DBConstants.F_PLACEID);
+//					String name = cur.getString(nameColumn);
+//					String id = cur.getString(idColumn);
+//					Log.d(Constants.LOG_TAG, "cursor=" + cur);
+//					Log.d(Constants.LOG_TAG, "Name=" + name + ", id=" + id);
+//				}
 			}
 		});
 		

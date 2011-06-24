@@ -1,5 +1,10 @@
 package com.orange.place.helper;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -8,11 +13,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
+import android.database.sqlite.SQLiteConstraintException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
+import com.orange.place.R;
 import com.orange.place.constant.DBConstants;
 import com.orange.place.constant.ServiceConstant;
 import com.orange.place.constants.Constants;
@@ -74,20 +81,51 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 				getDatabase().insert(Constants.TABLE_PLACE_PLACE, null, cv);
 			} catch (JSONException e) {
 				Log.e(Constants.LOG_TAG, "Storing data error!", e);
+			} catch (SQLiteConstraintException e) {
+				Log.w(Constants.LOG_TAG, "Place already in DB");
 			}
 		}
 	}
 
-	public Cursor queryPlaceList() {
+	public void cleanupPlaceList() {
+		getDatabase().execSQL(SQL_CLEANUP_PLACE_PLACE);
+	}
+
+	public void updatePlaceList(List<Map<String, Object>> list) {
+		List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
+		Map<String, Object> place = new HashMap<String, Object>();
+
+		Cursor cur = queryPlaceList();
+		while (cur.moveToNext()) {
+			place.put(DBConstants.F_PLACEID, cur.getString(cur.getColumnIndex(DBConstants.F_PLACEID)));
+			place.put(DBConstants.F_CREATE_DATE, cur.getString(cur.getColumnIndex(DBConstants.F_CREATE_DATE)));
+			place.put(DBConstants.F_RADIUS, cur.getString(cur.getColumnIndex(DBConstants.F_RADIUS)));
+			place.put(DBConstants.F_POST_TYPE, cur.getString(cur.getColumnIndex(DBConstants.F_POST_TYPE)));
+			place.put(DBConstants.F_DESC, cur.getString(cur.getColumnIndex(DBConstants.F_DESC)));
+			place.put(DBConstants.F_NAME, cur.getString(cur.getColumnIndex(DBConstants.F_NAME)));
+			place.put(DBConstants.F_LATITUDE, cur.getString(cur.getColumnIndex(DBConstants.F_LATITUDE)));
+			place.put(DBConstants.F_LONGITUDE, cur.getString(cur.getColumnIndex(DBConstants.F_LONGITUDE)));
+			place.put(DBConstants.F_USERID, cur.getString(cur.getColumnIndex(DBConstants.F_USERID)));
+			place.put("PlaceImage", R.drawable.main_tab_4_nav_on); // change it !
+			tmpList.add(place);
+		}
+		cur.close();
+
+		if (tmpList.size() != 0) {
+			list.clear();
+			list.addAll(tmpList);
+		} else {
+			Log.w(Constants.LOG_TAG, "Get an empty place list, will not clear and update old place list");
+		}
+	}
+
+	private Cursor queryPlaceList() {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 		queryBuilder.setTables(Constants.TABLE_PLACE_PLACE);
 
-		Cursor c = queryBuilder.query(getDatabase(), null, null, null, null, null, null);
-		return c;
-	}
-
-	public void cleanupPlaceList() {
-		getDatabase().execSQL(SQL_CLEANUP_PLACE_PLACE);
+		Cursor cursor = queryBuilder.query(getDatabase(), null, null, null, null, null, null);
+		Log.d(Constants.LOG_TAG, "Get place list from DB. Amount: " + cursor.getCount());
+		return cursor;
 	}
 
 	private SQLiteDatabase getDatabase() {

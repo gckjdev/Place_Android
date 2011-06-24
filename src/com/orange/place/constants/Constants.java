@@ -5,8 +5,8 @@ import com.orange.utils.UtilConstants;
 public class Constants {
 
 	// server side
-	//	public static final String SERVER_HTTP = "http://192.168.1.162:8000";
-	public static final String SERVER_HTTP = "http://192.168.0.67:8000";
+	public static final String SERVER_HTTP = "http://192.168.1.160:8000";
+	// public static final String SERVER_HTTP = "http://192.168.0.67:8000";
 	public static final String CONTEXT_PATH = "/api/i";
 
 	// sqlite database
