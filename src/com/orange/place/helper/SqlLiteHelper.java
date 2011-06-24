@@ -97,10 +97,10 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 
 	public void updatePlaceList(List<Map<String, Object>> list) {
 		List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
-		Map<String, Object> place = new HashMap<String, Object>();
 
 		Cursor cur = queryNearbyPlace();
 		while (cur.moveToNext()) {
+			Map<String, Object> place = new HashMap<String, Object>();
 			place.put(DBConstants.F_PLACEID, cur.getString(cur.getColumnIndex(DBConstants.F_PLACEID)));
 			place.put(DBConstants.F_CREATE_DATE, cur.getString(cur.getColumnIndex(DBConstants.F_CREATE_DATE)));
 			place.put(DBConstants.F_RADIUS, cur.getString(cur.getColumnIndex(DBConstants.F_RADIUS)));

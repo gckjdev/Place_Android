@@ -1,23 +1,22 @@
 package com.orange.place;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
 import com.github.droidfu.activities.BetterListActivity;
 import com.github.droidfu.concurrent.BetterAsyncTask;
@@ -28,13 +27,15 @@ import com.orange.place.constants.Constants;
 import com.orange.place.helper.SqlLiteHelper;
 import com.orange.place.tasks.PlaceTask;
 import com.orange.utils.ActivityUtil;
+import com.orange.utils.ToastUtil;
 
 //public class Activity_Place extends BetterListActivity { // we might need this for async 
 public class Activity_Place extends BetterListActivity {
 
-	private List<Map<String, Object>> placeList = new ArrayList<Map<String, Object>>();
-	private SimpleAdapter placeListAdapter;
-	private Button bRefresh;
+	private List<Map<String, Object>> nearbyPlaceList = new ArrayList<Map<String, Object>>();
+	private SimpleAdapter nearbyPlaceListAdapter;
+	private ImageButton bNewPlace;
+	private TextView tMore;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -47,24 +48,30 @@ public class Activity_Place extends BetterListActivity {
 		lookupViewElements();
 		setRefreshListener();
 
-		updatePlaceList(placeList);
+		updatePlaceList(nearbyPlaceList);
 		String[] placeListFrom = new String[] { "PlaceImage", DBConstants.F_NAME, DBConstants.F_DESC,
 				DBConstants.F_USERID };
 		int[] placeListTo = new int[] { R.id.PlaceImage, R.id.PlaceName, R.id.PlaceDesc, R.id.UserId };
-		placeListAdapter = new SimpleAdapter(this, placeList, R.layout.list_place_item, placeListFrom, placeListTo);
-		setListAdapter(placeListAdapter);
+		nearbyPlaceListAdapter = new SimpleAdapter(this, nearbyPlaceList, R.layout.list_place_item, placeListFrom, placeListTo);
+		setListAdapter(nearbyPlaceListAdapter);
 
 		ListView listView = getListView();
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				alertSelection(position);
+				showPlacePostList(position);
 			}
 		});
 
+		bNewPlace.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ToastUtil.makeNotImplToast(Activity_Place.this);
+			}
+		});
 	}
 
 	private void setRefreshListener() {
-		bRefresh.setOnClickListener(new View.OnClickListener() {
+		tMore.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -91,9 +98,9 @@ public class Activity_Place extends BetterListActivity {
 	}
 
 	private void updateNearbyPlaceListView() {
-		updatePlaceList(placeList);
-		Log.w(Constants.LOG_TAG, "Updating place list view with place list: " + placeList);
-		placeListAdapter.notifyDataSetChanged();
+		updatePlaceList(nearbyPlaceList);
+		Log.w(Constants.LOG_TAG, "Updating place list view with place list: " + nearbyPlaceList);
+		nearbyPlaceListAdapter.notifyDataSetChanged();
 	}
 
 	private void updatePlaceList(List<Map<String, Object>> list) {
@@ -141,9 +148,10 @@ public class Activity_Place extends BetterListActivity {
 		}
 	}
 
-	public void alertSelection(int position) {
+	public void showPlacePostList(int position) {
+		Map<String, Object> place = nearbyPlaceList.get(position);
 		new AlertDialog.Builder(this).setTitle("Self defined ListVeiw")
-				.setMessage("you clicked the button:" + position)
+				.setMessage("you clicked the place:" + place.get(DBConstants.F_PLACEID))
 				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int whButton) {
 					}
@@ -151,6 +159,7 @@ public class Activity_Place extends BetterListActivity {
 	}
 
 	private void lookupViewElements() {
-		bRefresh = (Button) findViewById(R.id.refresh);
+		bNewPlace = (ImageButton) findViewById(R.id.place_new);
+		tMore = (TextView) findViewById(R.id.refresh);
 	}
 }

@@ -22,16 +22,13 @@
 				android:text="@string/place_followed" android:layout_weight="1.0"
 				android:focusableInTouchMode="true" />
 		</LinearLayout>
-		<LinearLayout android:gravity="center"
-			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
-			android:layout_marginRight="16dip" android:layout_alignParentRight="true"
-			android:orientation="horizontal" android:layout_width="40dip"
-			android:layout_height="wrap_content">
-			<Button android:id="@+id/refresh" android:textSize="12sp"
-				android:textColor="#FFFFFF" android:background="@drawable/title_button"
-				android:layout_width="fill_parent" android:layout_height="fill_parent"
-				android:text="@string/refresh" android:gravity="center"
-				android:layout_centerVertical="true" />
+		<LinearLayout android:gravity="right|center_vertical" android:layout_alignParentRight="true"
+			android:layout_marginRight="12dip" android:layout_marginTop="8dip"
+			android:layout_marginBottom="8dip" android:orientation="horizontal"
+			android:layout_width="wrap_content" android:layout_height="wrap_content">
+			<ImageButton android:layout_height="3dp"
+				android:src="@drawable/item_add" android:layout_width="30dp"
+				android:id="@+id/place_new"></ImageButton>
 		</LinearLayout>
 	</RelativeLayout>
 
@@ -40,6 +37,16 @@
 		android:layout_gravity="top">
 		<ListView android:id="@android:id/list" android:layout_width="fill_parent"
 			android:layout_height="fill_parent" android:dividerHeight="1.5dp" />
+	</LinearLayout>
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="fill_parent" android:layout_width="fill_parent"
+		android:layout_gravity="top">
+		<TextView android:id="@+id/refresh" android:text="@string/refresh"
+			android:layout_gravity="center" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_marginBottom="25dip"
+			android:layout_marginTop="16dip" android:textSize="24sp"
+			android:clickable="true" />
 	</LinearLayout>
 
 </LinearLayout>
