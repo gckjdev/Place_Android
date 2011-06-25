@@ -10,6 +10,8 @@ import com.orange.place.constant.ServiceConstant;
 import com.orange.place.constants.Constants;
 
 public class UriHelper {
+	private static final String LOG_CREATED_URI = "Created uri: ";
+
 	private static Uri.Builder getHttpBaseUriBuilder() {
 		Builder uriBase = Uri.parse(Constants.SERVER_HTTP).buildUpon();
 		uriBase.path(Constants.CONTEXT_PATH);
@@ -46,10 +48,21 @@ public class UriHelper {
 		return uri;
 	}
 	
-	public static Uri createGetNearbyPlaceUri(String userId, double longtitude, double latitude) {
+	public static Uri createGetPlacePostsUri(String userId, String placeId) {
+		Builder uriBase = getHttpBaseUriBuilder();
+		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETPLACEPOST);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_PLACEID, placeId);
+
+		Uri uri = uriBase.build();
+		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
+		return uri;
+	}
+	
+	public static Uri createGetNearbyPlacesUri(String userId, double longtitude, double latitude) {
 		Builder uriBase = getHttpBaseUriBuilder();
 		
-		//uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETUSERFOLLOWPLACE);
 		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETNEARBYPLACE);
 		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
 		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
@@ -57,8 +70,7 @@ public class UriHelper {
 		uriBase.appendQueryParameter(ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
 		
 		Uri uri = uriBase.build();
-		Log.d(Constants.LOG_TAG, "Created uri for getNearbyPlace: " + uri.toString());
+		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
 		return uri;
-		
 	}
 }

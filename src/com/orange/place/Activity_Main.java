@@ -3,7 +3,6 @@ package com.orange.place;
 import android.app.TabActivity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
 import android.widget.FrameLayout;
 import android.widget.TabHost;
 

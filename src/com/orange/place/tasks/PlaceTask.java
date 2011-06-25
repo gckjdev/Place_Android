@@ -1,5 +1,8 @@
 package com.orange.place.tasks;
 
+import java.util.List;
+import java.util.Map;
+
 import org.json.JSONObject;
 
 import android.content.Context;
@@ -16,20 +19,48 @@ import com.orange.place.helper.UriHelper;
 import com.orange.utils.HttpUtils;
 
 public class PlaceTask {
-	public static int getNearbyPlaceList(Context context, Location location) {
+
+	public static void getNearbyPlacesFromDB(Context context, List<Map<String, Object>> list) {
+		SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
+		sqlLiteHelper.updatePlaceList(list);
+	}
+
+	public static void getPlacePostsFromDB(Context context, List<Map<String, Object>> list, String placeId) {
+		SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
+		sqlLiteHelper.updatePlacePostList(list, placeId);
+	}
+
+	public static int getPlacePostsFromServer(Context context, String placeId) {
+		if (placeId == null) {
+			Log.e(Constants.LOG_TAG, "The placeId is null, no request to server!");
+			return Constants.ERROR_PLACEID_UNKNOWN;
+		}
+		Uri uri = UriHelper.createGetPlacePostsUri(PrefHelper.getUserId(context), placeId);
+		JSONObject json = HttpUtils.httpGet(uri);
+
+		int resultCode = JsonHelper.getResultCode(json);
+		if (resultCode == ErrorCode.ERROR_SUCCESS) {
+			SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context); // improve: not create the helper every time?
+			sqlLiteHelper.storePlacePosts(JsonHelper.getReturnDataArray(json), placeId);
+		}
+
+		return resultCode;
+	}
+	
+	public static int getNearbyPlacesFromServer(Context context, Location location) {
 		if (location == null) {
-			Log.e(Constants.LOG_TAG, "The location for getting place list is null, no request to server!");
+			Log.e(Constants.LOG_TAG, "The location is null, no request to server!");
 			return Constants.ERROR_LOCATION_UNKNOWN;
 		}
 
-		Uri uri = UriHelper.createGetNearbyPlaceUri(PrefHelper.getUserId(context), location.getLongitude(),
+		Uri uri = UriHelper.createGetNearbyPlacesUri(PrefHelper.getUserId(context), location.getLongitude(),
 				location.getLatitude());
 		JSONObject json = HttpUtils.httpGet(uri);
 
 		int resultCode = JsonHelper.getResultCode(json);
 		if (resultCode == ErrorCode.ERROR_SUCCESS) {
 			SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context); // improve: not create the helper every time?
-			sqlLiteHelper.storeNearbyPlaceList(JsonHelper.getReturnDataArray(json));
+			sqlLiteHelper.storeNearbyPlaces(JsonHelper.getReturnDataArray(json));
 		}
 
 		return resultCode;
