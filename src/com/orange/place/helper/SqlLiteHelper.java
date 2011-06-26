@@ -1,12 +1,10 @@
 package com.orange.place.helper;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.content.ContentValues;
@@ -18,16 +16,13 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
-import com.orange.place.R;
 import com.orange.place.constant.DBConstants;
-import com.orange.place.constant.ServiceConstant;
 import com.orange.place.constants.Constants;
-import com.orange.utils.JsonUtil;
 
 public class SqlLiteHelper extends SQLiteOpenHelper {
 
+	private static final String LOG_EMPTY_LIST = "Get an empty list, will not clear and update old list";
 	private static final String LOG_STORING_DATA_ERROR = "Storing data error!";
-
 	private static final String LOG_ERROR_NO_DATA = "No data found for DB store, will just ignore!";
 
 	private static SQLiteDatabase writableDb = null;
@@ -40,8 +35,8 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		Log.v(Constants.LOG_TAG, "Creating database");
 		try {
-			db.execSQL(SqlLiteHelper.SQL_CREATE_NEARBY_PLACE);
-			db.execSQL(SqlLiteHelper.SQL_CREATE_PLACE_POST);
+			db.execSQL(SqlLiteMappingHelper.SQL_CREATE_NEARBY_PLACE);
+			db.execSQL(SqlLiteMappingHelper.SQL_CREATE_PLACE_POST);
 		} catch (SQLException e) {
 			Log.e(Constants.LOG_TAG, "Get SQL exception!", e);
 		}
@@ -49,9 +44,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.w(Constants.LOG_TAG, "Upgrading db from version " + oldVersion + " to " + newVersion
-				+ " all data will be clobbered");
-		db.execSQL("DROP TABLE IF EXISTS table-name-abc");
+		Log.w(Constants.LOG_TAG, "Upgrading db from version " + oldVersion + " to " + newVersion);
 		this.onCreate(db);
 	}
 
@@ -72,9 +65,9 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		cleanupPlacePosts(placeId); // only keep the latest data
 		for (int i = 0; i < len; i++) {
 			try {
-				cv = createCVForPost((JSONObject) jsonArr.get(i));
+				cv = SqlLiteMappingHelper.mapJsonToCV_Post((JSONObject) jsonArr.get(i));
 				getDatabase().insert(Constants.TABLE_PLACE_POST, null, cv);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				Log.e(Constants.LOG_TAG, LOG_STORING_DATA_ERROR, e);
 				return Constants.ERROR_SQLITE;
 			}
@@ -93,9 +86,9 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		cleanupNearbyPlaces(); // only keep the latest data
 		for (int i = 0; i < len; i++) {
 			try {
-				cv = createCVForPlace((JSONObject) jsonArr.get(i));
+				cv = SqlLiteMappingHelper.mapJsonToCV_Place((JSONObject) jsonArr.get(i));
 				getDatabase().insert(Constants.TABLE_NEARBY_PLACE, null, cv);
-			} catch (JSONException e) {
+			} catch (Exception e) {
 				Log.e(Constants.LOG_TAG, LOG_STORING_DATA_ERROR, e);
 				return Constants.ERROR_SQLITE;
 			}
@@ -117,69 +110,34 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		getDatabase().delete(Constants.TABLE_NEARBY_PLACE, null, null);
 	}
 
-	public void updatePlacePostList(List<Map<String, Object>> list, String placeId) {
+	public void getPlacePosts(List<Map<String, Object>> list, String placeId) {
 		List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
 		Cursor cur = queryPlacePosts(placeId);
 		while (cur.moveToNext()) {
-			Map<String, Object> post = new HashMap<String, Object>();
-			post.put(DBConstants.F_POSTID, cur.getString(cur.getColumnIndex(DBConstants.F_POSTID)));
-			post.put(DBConstants.F_USERID, cur.getString(cur.getColumnIndex(DBConstants.F_USERID)));
-			post.put(DBConstants.F_PLACEID, cur.getString(cur.getColumnIndex(DBConstants.F_PLACEID)));
-			post.put(DBConstants.F_LONGITUDE, cur.getString(cur.getColumnIndex(DBConstants.F_LONGITUDE)));
-			post.put(DBConstants.F_LATITUDE, cur.getString(cur.getColumnIndex(DBConstants.F_LATITUDE)));
-			post.put(DBConstants.F_USER_LONGITUDE, cur.getString(cur.getColumnIndex(DBConstants.F_USER_LONGITUDE)));
-			post.put(DBConstants.F_USER_LATITUDE, cur.getString(cur.getColumnIndex(DBConstants.F_USER_LATITUDE)));
-			post.put(DBConstants.F_TEXT_CONTENT, cur.getString(cur.getColumnIndex(DBConstants.F_TEXT_CONTENT)));
-			post.put(DBConstants.F_CONTENT_TYPE, cur.getString(cur.getColumnIndex(DBConstants.F_CONTENT_TYPE)));
-			post.put(DBConstants.F_IMAGE_URL, cur.getString(cur.getColumnIndex(DBConstants.F_IMAGE_URL)));
-			post.put(DBConstants.F_TOTAL_VIEW, cur.getString(cur.getColumnIndex(DBConstants.F_TOTAL_VIEW)));
-			post.put(DBConstants.F_TOTAL_FORWARD, cur.getString(cur.getColumnIndex(DBConstants.F_TOTAL_FORWARD)));
-			post.put(DBConstants.F_TOTAL_QUOTE, cur.getString(cur.getColumnIndex(DBConstants.F_TOTAL_QUOTE)));
-			post.put(DBConstants.F_TOTAL_REPLY, cur.getString(cur.getColumnIndex(DBConstants.F_TOTAL_REPLY)));
-			post.put(DBConstants.F_CREATE_DATE, cur.getString(cur.getColumnIndex(DBConstants.F_CREATE_DATE)));
-			post.put(DBConstants.F_SRC_POSTID, cur.getString(cur.getColumnIndex(DBConstants.F_SRC_POSTID)));
-			post.put(DBConstants.F_NICKNAME, cur.getString(cur.getColumnIndex(DBConstants.F_NICKNAME)));
-			post.put(DBConstants.F_AVATAR, cur.getString(cur.getColumnIndex(DBConstants.F_AVATAR)));
-			post.put(DBConstants.C_TOTAL_RELATED, cur.getString(cur.getColumnIndex(DBConstants.C_TOTAL_RELATED)));
-			post.put(DBConstants.F_NAME, cur.getString(cur.getColumnIndex(DBConstants.F_NAME)));
-			post.put("UserImage", R.drawable.z_tmp_icon1); // change it !
-			tmpList.add(post);
+			tmpList.add(SqlLiteMappingHelper.mapCursorToMap_Post(cur));
 		}
 		cur.close();
 
-		if (tmpList.size() != 0) {
-			list.clear();
-			list.addAll(tmpList);
-		} else {
-			Log.w(Constants.LOG_TAG, "Get an empty place post list, will not clear and update old place post list");
-		}
+		checkAndUpdateList(list, tmpList);
 	}
 
-	public void updatePlaceList(List<Map<String, Object>> list) {
+	public void getNearbyPlaces(List<Map<String, Object>> list) {
 		List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
-
 		Cursor cur = queryNearbyPlaces();
 		while (cur.moveToNext()) {
-			Map<String, Object> place = new HashMap<String, Object>();
-			place.put(DBConstants.F_PLACEID, cur.getString(cur.getColumnIndex(DBConstants.F_PLACEID)));
-			place.put(DBConstants.F_CREATE_DATE, cur.getString(cur.getColumnIndex(DBConstants.F_CREATE_DATE)));
-			place.put(DBConstants.F_RADIUS, cur.getString(cur.getColumnIndex(DBConstants.F_RADIUS)));
-			place.put(DBConstants.F_POST_TYPE, cur.getString(cur.getColumnIndex(DBConstants.F_POST_TYPE)));
-			place.put(DBConstants.F_DESC, cur.getString(cur.getColumnIndex(DBConstants.F_DESC)));
-			place.put(DBConstants.F_NAME, cur.getString(cur.getColumnIndex(DBConstants.F_NAME)));
-			place.put(DBConstants.F_LATITUDE, cur.getString(cur.getColumnIndex(DBConstants.F_LATITUDE)));
-			place.put(DBConstants.F_LONGITUDE, cur.getString(cur.getColumnIndex(DBConstants.F_LONGITUDE)));
-			place.put(DBConstants.F_USERID, cur.getString(cur.getColumnIndex(DBConstants.F_USERID)));
-			place.put("PlaceImage", R.drawable.z_tmp_icon1); // change it !
-			tmpList.add(place);
+			tmpList.add(SqlLiteMappingHelper.mapCursorToMap_Place(cur));
 		}
 		cur.close();
 
+		checkAndUpdateList(list, tmpList);
+	}
+
+	private void checkAndUpdateList(List<Map<String, Object>> list, List<Map<String, Object>> tmpList) {
 		if (tmpList.size() != 0) {
 			list.clear();
 			list.addAll(tmpList);
 		} else {
-			Log.w(Constants.LOG_TAG, "Get an empty place list, will not clear and update old place list");
+			Log.w(Constants.LOG_TAG, LOG_EMPTY_LIST);
 		}
 	}
 
@@ -191,7 +149,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		selectionArgs[0] = placeId;
 
 		Cursor cursor = queryBuilder.query(getDatabase(), null, selection, selectionArgs, null, null, null);
-		Log.d(Constants.LOG_TAG, "Get place posts from DB. PlaceId:" + placeId);
+		Log.d(Constants.LOG_TAG, "Query place posts from DB. PlaceId:" + placeId);
 		return cursor;
 	}
 
@@ -200,7 +158,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		queryBuilder.setTables(Constants.TABLE_NEARBY_PLACE);
 
 		Cursor cursor = queryBuilder.query(getDatabase(), null, null, null, null, null, null);
-		Log.d(Constants.LOG_TAG, "Get place list from DB. Amount: " + cursor.getCount());
+		Log.d(Constants.LOG_TAG, "Query place list from DB. Amount: " + cursor.getCount());
 		return cursor;
 	}
 
@@ -210,81 +168,4 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		}
 		return writableDb;
 	}
-
-	private ContentValues createCVForPost(JSONObject json) {
-		ContentValues cv = new ContentValues();
-
-		cv.put(DBConstants.F_POSTID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_POSTID));
-		cv.put(DBConstants.F_USERID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_USERID));
-		cv.put(DBConstants.F_PLACEID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_PLACEID));
-		cv.put(DBConstants.F_LONGITUDE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_LONGTITUDE));
-		cv.put(DBConstants.F_LATITUDE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_LATITUDE));
-		cv.put(DBConstants.F_USER_LONGITUDE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_USER_LONGITUDE));
-		cv.put(DBConstants.F_USER_LATITUDE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_USER_LATITUDE));
-		cv.put(DBConstants.F_TEXT_CONTENT, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TEXT_CONTENT));
-		cv.put(DBConstants.F_CONTENT_TYPE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_CONTENT_TYPE));
-		cv.put(DBConstants.F_IMAGE_URL, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_IMAGE_URL));
-		cv.put(DBConstants.F_TOTAL_VIEW, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TOTAL_VIEW));
-		cv.put(DBConstants.F_TOTAL_FORWARD, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TOTAL_FORWARD));
-		cv.put(DBConstants.F_TOTAL_QUOTE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TOTAL_QUOTE));
-		cv.put(DBConstants.F_TOTAL_REPLY, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TOTAL_REPLY));
-		cv.put(DBConstants.F_CREATE_DATE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_CREATE_DATE));
-		cv.put(DBConstants.F_SRC_POSTID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_SRC_POSTID));
-		cv.put(DBConstants.F_NICKNAME, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_NICKNAME));
-		cv.put(DBConstants.F_AVATAR, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_AVATAR));
-		cv.put(DBConstants.C_TOTAL_RELATED, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TOTAL_RELATED));
-		cv.put(DBConstants.F_NAME, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_NAME));
-
-		return cv;
-	}
-
-	private ContentValues createCVForPlace(JSONObject json) {
-		ContentValues cv = new ContentValues();
-		cv.put(DBConstants.F_PLACEID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_PLACEID));
-		cv.put(DBConstants.F_CREATE_DATE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_CREATE_DATE));
-		cv.put(DBConstants.F_RADIUS, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_RADIUS));
-		cv.put(DBConstants.F_POST_TYPE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_POSTTYPE));
-		cv.put(DBConstants.F_DESC, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_DESC));
-		cv.put(DBConstants.F_NAME, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_NAME));
-		cv.put(DBConstants.F_LATITUDE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_LATITUDE));
-		cv.put(DBConstants.F_LONGITUDE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_LONGTITUDE));
-		cv.put(DBConstants.F_USERID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_CREATE_USERID));
-		return cv;
-	}
-
-	// private static final String SQL_CLEANUP_NEARBY_PLACE = "DELETE FROM " + Constants.TABLE_NEARBY_PLACE + ";";
-	private static final String SQL_CREATE_PLACE_POST = "CREATE TABLE " + Constants.TABLE_PLACE_POST + " (" //
-			+ DBConstants.F_POSTID + " TEXT PRIMARY KEY, " //
-			+ DBConstants.F_USERID + " TEXT, " //
-			+ DBConstants.F_PLACEID + " TEXT, " //
-			+ DBConstants.F_LONGITUDE + " TEXT, " //
-			+ DBConstants.F_LATITUDE + " TEXT, " //
-			+ DBConstants.F_USER_LONGITUDE + " TEXT, " //
-			+ DBConstants.F_USER_LATITUDE + " TEXT, " //
-			+ DBConstants.F_TEXT_CONTENT + " TEXT, " //
-			+ DBConstants.F_CONTENT_TYPE + " TEXT, " //
-			+ DBConstants.F_TOTAL_VIEW + " TEXT, " //
-			+ DBConstants.F_TOTAL_FORWARD + " TEXT, " //
-			+ DBConstants.F_TOTAL_QUOTE + " TEXT, " //
-			+ DBConstants.F_TOTAL_REPLY + " TEXT, " //
-			+ DBConstants.F_CREATE_DATE + " TEXT, " //
-			+ DBConstants.F_SRC_POSTID + " TEXT, " //
-			+ DBConstants.F_NICKNAME + " TEXT, " //
-			+ DBConstants.F_AVATAR + " TEXT, " //
-			+ DBConstants.C_TOTAL_RELATED + " TEXT, " //
-			+ DBConstants.F_IMAGE_URL + " TEXT, " //
-			+ DBConstants.F_NAME + " TEXT" // don't have "," for last one !
-			+ ");";
-
-	private static final String SQL_CREATE_NEARBY_PLACE = "CREATE TABLE " + Constants.TABLE_NEARBY_PLACE + " (" //
-			+ DBConstants.F_PLACEID + " TEXT PRIMARY KEY, " //
-			+ DBConstants.F_CREATE_DATE + " TEXT, " //
-			+ DBConstants.F_RADIUS + " TEXT, " //
-			+ DBConstants.F_POST_TYPE + " TEXT, " //
-			+ DBConstants.F_DESC + " TEXT, " //
-			+ DBConstants.F_NAME + " TEXT, " //
-			+ DBConstants.F_LATITUDE + " TEXT, " //
-			+ DBConstants.F_LONGITUDE + " TEXT, " //
-			+ DBConstants.F_USERID + " TEXT" // don't have "," for last one !
-			+ ");";
 }

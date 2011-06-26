@@ -22,12 +22,12 @@ public class PlaceTask {
 
 	public static void getNearbyPlacesFromDB(Context context, List<Map<String, Object>> list) {
 		SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
-		sqlLiteHelper.updatePlaceList(list);
+		sqlLiteHelper.getNearbyPlaces(list);
 	}
 
 	public static void getPlacePostsFromDB(Context context, List<Map<String, Object>> list, String placeId) {
 		SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
-		sqlLiteHelper.updatePlacePostList(list, placeId);
+		sqlLiteHelper.getPlacePosts(list, placeId);
 	}
 
 	public static int getPlacePostsFromServer(Context context, String placeId) {

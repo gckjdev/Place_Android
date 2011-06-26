@@ -44,13 +44,11 @@ public class Activity_Place extends BetterListActivity {
 		ActivityUtil.setFullScreen(this);
 		setContentView(R.layout.activity_place);
 		lookupViewElements();
-		setRefreshListener();
 
 		// firstly show what we have in DB
 		PlaceTask.getNearbyPlacesFromDB(this, nearbyPlaces);
-		String[] placeListFrom = new String[] { "PlaceImage", DBConstants.F_NAME, DBConstants.F_DESC,
-				DBConstants.F_USERID };
-		int[] placeListTo = new int[] { R.id.PlaceImage, R.id.PlaceName, R.id.PlaceDesc, R.id.UserId };
+		String[] placeListFrom = new String[] { DBConstants.F_NAME, DBConstants.F_DESC, DBConstants.F_USERID };
+		int[] placeListTo = new int[] { R.id.PlaceName, R.id.PlaceDesc, R.id.UserId };
 		nearbyPlacesAdapter = new SimpleAdapter(this, nearbyPlaces, R.layout.list_place_item, placeListFrom,
 				placeListTo);
 		setListAdapter(nearbyPlacesAdapter);
@@ -58,17 +56,25 @@ public class Activity_Place extends BetterListActivity {
 		// then, try get newest place list async
 		asyncGetNearbyPlaces();
 
-		ListView listView = getListView();
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				showPlacePosts(position);
-			}
-		});
-		
+		setRefreshListener();
+		setListItemListener();
+		setNewPlaceListener();
+	}
+
+	private void setNewPlaceListener() {
 		bNewPlace.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				ToastUtil.makeNotImplToast(Activity_Place.this);
+			}
+		});
+	}
+
+	private void setListItemListener() {
+		ListView listView = getListView();
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+				showPlacePosts(position);
 			}
 		});
 	}
@@ -140,6 +146,8 @@ public class Activity_Place extends BetterListActivity {
 		Map<String, Object> place = nearbyPlaces.get(position);
 		Intent intent = new Intent(Activity_Place.this, Activity_Place_Post.class);
 		intent.putExtra(DBConstants.F_PLACEID, (String) place.get(DBConstants.F_PLACEID));
+		intent.putExtra(DBConstants.F_NAME, (String) place.get(DBConstants.F_NAME));
+		intent.putExtra(DBConstants.F_DESC, (String) place.get(DBConstants.F_DESC));
 		startActivity(intent);
 	}
 

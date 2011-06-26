@@ -34,43 +34,58 @@ public class Activity_Place_Post extends BetterListActivity {
 	private SimpleAdapter placePostsAdapter;
 	private Button bGoBack;
 	private TextView tMore;
+	private TextView tPlaceName;
+	private TextView tPlaceDesc;
 	private String placeId;
+	private String placeName;
+	private String placeDesc;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
-		
+
 		placeId = getIntent().getStringExtra(DBConstants.F_PLACEID);
-		Log.d(Constants.LOG_TAG, "Start to show place post with ID: " + placeId);
+		placeName = getIntent().getStringExtra(DBConstants.F_NAME);
+		placeDesc = getIntent().getStringExtra(DBConstants.F_DESC);
+		Log.d(Constants.LOG_TAG, "Start to show place posts with placeId: " + placeId);
 
 		ActivityUtil.setNoTitle(this);
 		ActivityUtil.setFullScreen(this);
 		setContentView(R.layout.activity_place_post);
-		lookupViewElements();
-		setRefreshListener();
+		lookupAndSetViewElements();
 
 		// firstly show what we have in DB
 		PlaceTask.getPlacePostsFromDB(this, placePosts, placeId);
-		String[] placePostsFrom = new String[] { "UserImage", DBConstants.F_TEXT_CONTENT, DBConstants.F_USERID };
-		int[] placePostsTo = new int[] { R.id.UserImage, R.id.PostContent, R.id.UserId };
-		placePostsAdapter = new SimpleAdapter(this, placePosts, R.layout.list_place_post_item, placePostsFrom, placePostsTo);
+		String[] placePostsFrom = new String[] { "UserImage", DBConstants.F_TEXT_CONTENT, DBConstants.F_USERID,
+				DBConstants.F_CREATE_DATE, DBConstants.C_TOTAL_RELATED };
+		int[] placePostsTo = new int[] { R.id.UserImage, R.id.PostContent, R.id.UserId, R.id.PostTime, R.id.PostRelated };
+		placePostsAdapter = new SimpleAdapter(this, placePosts, R.layout.list_place_post_item, placePostsFrom,
+				placePostsTo);
 		setListAdapter(placePostsAdapter);
 
 		// then get newest posts async
 		asyncGetPlacePosts();
-		
-		ListView listView = getListView();
-		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				showPlacePostDetail(position);
-			}
-		});
 
+		setRefreshListener();
+		setListItemListener();
+		setGoBackListener();
+	}
+
+	private void setGoBackListener() {
 		bGoBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				ToastUtil.makeNotImplToast(Activity_Place_Post.this);
+			}
+		});
+	}
+
+	private void setListItemListener() {
+		ListView listView = getListView();
+		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+				showPlacePostDetail(position);
 			}
 		});
 	}
@@ -148,8 +163,12 @@ public class Activity_Place_Post extends BetterListActivity {
 				}).show();
 	}
 
-	private void lookupViewElements() {
+	private void lookupAndSetViewElements() {
 		bGoBack = (Button) findViewById(R.id.go_back);
 		tMore = (TextView) findViewById(R.id.refresh);
+		tPlaceName = (TextView) findViewById(R.id.PlaceName);
+		tPlaceName.setText(placeName);
+		tPlaceDesc = (TextView) findViewById(R.id.PlaceDesc);
+		tPlaceDesc.setText(placeDesc);
 	}
 }
