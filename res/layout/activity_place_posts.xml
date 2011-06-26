@@ -27,7 +27,7 @@
 			android:layout_marginRight="16dip" android:layout_alignParentRight="true"
 			android:orientation="horizontal" android:layout_width="50dip"
 			android:layout_height="wrap_content">
-			<Button android:id="@+id/TODO" android:textSize="12sp"
+			<Button android:id="@+id/todo" android:textSize="12sp"
 				android:textColor="@android:color/black" android:background="@drawable/title_button"
 				android:layout_width="fill_parent" android:layout_height="fill_parent"
 				android:text="@string/todo" android:gravity="center"
@@ -38,17 +38,10 @@
 	<LinearLayout android:layout_width="wrap_content"
 		android:layout_height="60dp" android:orientation="horizontal"
 		android:layout_margin="10dp" android:background="@android:color/darker_gray">
-		<LinearLayout android:layout_width="wrap_content"
-			android:layout_height="wrap_content" android:orientation="vertical"
-			android:layout_weight="1">
-			<TextView android:id="@+id/PlaceName" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:maxLines="1"
-				android:ellipsize="marquee" android:textColor="@android:color/black"
-				android:textSize="20sp" />
-			<TextView android:id="@+id/PlaceDesc" android:layout_width="wrap_content"
-				android:layout_height="wrap_content" android:maxLines="1"
-				android:layout_alignParentLeft="true" android:ellipsize="marquee"
-				android:textColor="@android:color/black" android:textSize="15sp" />
+		<LinearLayout android:gravity="center"
+			android:layout_weight="1" android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+			<include layout="@layout/item_place" />
 		</LinearLayout>
 		<LinearLayout android:gravity="center"
 			android:layout_margin="10dip" android:layout_alignParentRight="true"
@@ -60,6 +53,31 @@
 				android:text="@string/follow" android:gravity="center"
 				android:layout_centerVertical="true" />
 		</LinearLayout>
+	</LinearLayout>
+
+	<!-- <LinearLayout android:layout_width="wrap_content" android:layout_height="60dp" 
+		android:orientation="horizontal" android:layout_margin="10dp" android:background="@android:color/darker_gray"> 
+		<LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content" 
+		android:orientation="vertical" android:layout_weight="1"> <TextView android:id="@+id/place_name" 
+		android:layout_width="wrap_content" android:layout_height="wrap_content" 
+		android:maxLines="1" android:ellipsize="marquee" android:textColor="@android:color/black" 
+		android:textSize="20sp" /> <TextView android:id="@+id/place_desc" android:layout_width="wrap_content" 
+		android:layout_height="wrap_content" android:maxLines="1" android:layout_alignParentLeft="true" 
+		android:ellipsize="marquee" android:textColor="@android:color/black" android:textSize="15sp" 
+		/> </LinearLayout> <LinearLayout android:gravity="center" android:layout_margin="10dip" 
+		android:layout_alignParentRight="true" android:orientation="horizontal" android:layout_width="wrap_content" 
+		android:layout_height="wrap_content"> <Button android:id="@+id/follow" android:textSize="12sp" 
+		android:textColor="#FFFFFF" android:background="@drawable/title_button" android:layout_width="fill_parent" 
+		android:layout_height="fill_parent" android:text="@string/follow" android:gravity="center" 
+		android:layout_centerVertical="true" /> </LinearLayout> </LinearLayout> -->
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:layout_gravity="top">
+		<TextView android:text="@string/place_latest_post"
+			android:layout_gravity="left" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_margin="12dip"
+			android:textSize="20sp" android:clickable="true" />
 	</LinearLayout>
 
 	<LinearLayout android:orientation="vertical"

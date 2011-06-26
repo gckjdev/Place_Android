@@ -4,10 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.location.Location;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,12 +26,12 @@ import com.orange.utils.ActivityUtil;
 import com.orange.utils.ToastUtil;
 
 //public class Activity_Place extends BetterListActivity { // we might need this for async 
-public class Activity_Place_Post extends BetterListActivity {
+public class Activity_PlacePosts extends BetterListActivity {
 
 	private List<Map<String, Object>> placePosts = new ArrayList<Map<String, Object>>();
 	private SimpleAdapter placePostsAdapter;
 	private Button bGoBack;
-	private TextView tMore;
+	private TextView tRefresh;
 	private TextView tPlaceName;
 	private TextView tPlaceDesc;
 	private String placeId;
@@ -52,15 +50,16 @@ public class Activity_Place_Post extends BetterListActivity {
 
 		ActivityUtil.setNoTitle(this);
 		ActivityUtil.setFullScreen(this);
-		setContentView(R.layout.activity_place_post);
+		setContentView(R.layout.activity_place_posts);
 		lookupAndSetViewElements();
 
 		// firstly show what we have in DB
 		PlaceTask.getPlacePostsFromDB(this, placePosts, placeId);
 		String[] placePostsFrom = new String[] { "UserImage", DBConstants.F_TEXT_CONTENT, DBConstants.F_USERID,
 				DBConstants.F_CREATE_DATE, DBConstants.C_TOTAL_RELATED };
-		int[] placePostsTo = new int[] { R.id.UserImage, R.id.PostContent, R.id.UserId, R.id.PostTime, R.id.PostRelated };
-		placePostsAdapter = new SimpleAdapter(this, placePosts, R.layout.list_place_post_item, placePostsFrom,
+		int[] placePostsTo = new int[] { R.id.user_image, R.id.post_content, R.id.user_id, R.id.post_time,
+				R.id.post_related };
+		placePostsAdapter = new SimpleAdapter(this, placePosts, R.layout.item_post, placePostsFrom,
 				placePostsTo);
 		setListAdapter(placePostsAdapter);
 
@@ -76,7 +75,7 @@ public class Activity_Place_Post extends BetterListActivity {
 		bGoBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtil.makeNotImplToast(Activity_Place_Post.this);
+				ToastUtil.makeNotImplToast(Activity_PlacePosts.this);
 			}
 		});
 	}
@@ -91,7 +90,7 @@ public class Activity_Place_Post extends BetterListActivity {
 	}
 
 	private void setRefreshListener() {
-		tMore.setOnClickListener(new View.OnClickListener() {
+		tRefresh.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				asyncGetPlacePosts();
@@ -101,7 +100,7 @@ public class Activity_Place_Post extends BetterListActivity {
 
 	private void asyncGetPlacePosts() {
 		AsyncGetPlacePostsTask getPlacePostsTask = new AsyncGetPlacePostsTask(this);
-		getPlacePostsTask.setCallable(new AsyncGetPlaceListCallable());
+		getPlacePostsTask.setCallable(new AsyncGetPlacePostsCallable());
 		getPlacePostsTask.disableDialog();
 		getPlacePostsTask.setPlaceId(placeId);
 		getPlacePostsTask.execute();
@@ -109,10 +108,10 @@ public class Activity_Place_Post extends BetterListActivity {
 
 	private void updatePlacePostsView() {
 		PlaceTask.getPlacePostsFromDB(this, placePosts, placeId);
-		Log.w(Constants.LOG_TAG, "Updating place list view with place list: " + placePosts);
+		Log.d(Constants.LOG_TAG, "Updating place post list view with: " + placePosts);
 		placePostsAdapter.notifyDataSetChanged();
 	}
-
+	
 	private class AsyncGetPlacePostsTask extends BetterAsyncTask<Void, Void, Integer> {
 		private String placeId;
 
@@ -128,7 +127,7 @@ public class Activity_Place_Post extends BetterListActivity {
 		@Override
 		protected void after(Context context, Integer taskResult) {
 			if (taskResult == ErrorCode.ERROR_SUCCESS) {
-				((Activity_Place_Post) context).updatePlacePostsView();
+				((Activity_PlacePosts) context).updatePlacePostsView();
 			} else {
 				Log.w(Constants.LOG_TAG, getClass().getName() + " failed, nothing need to update!");
 			}
@@ -143,32 +142,33 @@ public class Activity_Place_Post extends BetterListActivity {
 		}
 	}
 
-	private class AsyncGetPlaceListCallable implements BetterAsyncTaskCallable<Void, Void, Integer> {
+	private class AsyncGetPlacePostsCallable implements BetterAsyncTaskCallable<Void, Void, Integer> {
 		@Override
 		public Integer call(BetterAsyncTask<Void, Void, Integer> task) throws Exception {
 			int resultCode = Constants.ERROR_UNKOWN;
 			String placeId = ((AsyncGetPlacePostsTask) task).getPlaceId();
-			resultCode = PlaceTask.getPlacePostsFromServer(Activity_Place_Post.this, placeId);
+			resultCode = PlaceTask.getPlacePostsFromServer(Activity_PlacePosts.this, placeId);
 			return resultCode;
 		}
 	}
 
 	public void showPlacePostDetail(int position) {
-		Map<String, Object> place = placePosts.get(position);
-		new AlertDialog.Builder(this).setTitle("Self defined ListVeiw")
-				.setMessage("you clicked the place post:" + place.get(DBConstants.F_POSTID))
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whButton) {
-					}
-				}).show();
+		Map<String, Object> post = placePosts.get(position);
+		Intent intent = new Intent(Activity_PlacePosts.this, Activity_PostDetail.class);
+		intent.putExtra(DBConstants.F_POSTID, (String) post.get(DBConstants.F_POSTID));
+		intent.putExtra(DBConstants.F_TEXT_CONTENT, (String) post.get(DBConstants.F_TEXT_CONTENT));
+		intent.putExtra(DBConstants.C_TOTAL_RELATED, (String) post.get(DBConstants.C_TOTAL_RELATED));
+		intent.putExtra(DBConstants.F_CREATE_DATE, (String) post.get(DBConstants.F_CREATE_DATE));
+		intent.putExtra("UserImage", (Integer) post.get("UserImage"));
+		startActivity(intent);
 	}
 
 	private void lookupAndSetViewElements() {
 		bGoBack = (Button) findViewById(R.id.go_back);
-		tMore = (TextView) findViewById(R.id.refresh);
-		tPlaceName = (TextView) findViewById(R.id.PlaceName);
+		tRefresh = (TextView) findViewById(R.id.refresh);
+		tPlaceName = (TextView) findViewById(R.id.place_name);
 		tPlaceName.setText(placeName);
-		tPlaceDesc = (TextView) findViewById(R.id.PlaceDesc);
+		tPlaceDesc = (TextView) findViewById(R.id.place_desc);
 		tPlaceDesc.setText(placeDesc);
 	}
 }

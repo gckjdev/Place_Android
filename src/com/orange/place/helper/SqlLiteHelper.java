@@ -17,13 +17,14 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.util.Log;
 
 import com.orange.place.constant.DBConstants;
+import com.orange.place.constant.ErrorCode;
 import com.orange.place.constants.Constants;
 
 public class SqlLiteHelper extends SQLiteOpenHelper {
 
 	private static final String LOG_EMPTY_LIST = "Get an empty list, will not clear and update old list";
 	private static final String LOG_STORING_DATA_ERROR = "Storing data error!";
-	private static final String LOG_ERROR_NO_DATA = "No data found for DB store, will just ignore!";
+	private static final String LOG_ERROR_NO_DATA = "No data found for DB to store, will just ignore!";
 
 	private static SQLiteDatabase writableDb = null;
 
@@ -35,8 +36,9 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		Log.v(Constants.LOG_TAG, "Creating database");
 		try {
-			db.execSQL(SqlLiteMappingHelper.SQL_CREATE_NEARBY_PLACE);
-			db.execSQL(SqlLiteMappingHelper.SQL_CREATE_PLACE_POST);
+			db.execSQL(MappingHelper.SQL_CREATE_FOLLOWED_PLACE);
+			db.execSQL(MappingHelper.SQL_CREATE_NEARBY_PLACE);
+			db.execSQL(MappingHelper.SQL_CREATE_PLACE_POST);
 		} catch (SQLException e) {
 			Log.e(Constants.LOG_TAG, "Get SQL exception!", e);
 		}
@@ -65,35 +67,45 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		cleanupPlacePosts(placeId); // only keep the latest data
 		for (int i = 0; i < len; i++) {
 			try {
-				cv = SqlLiteMappingHelper.mapJsonToCV_Post((JSONObject) jsonArr.get(i));
+				cv = MappingHelper.mapJsonToCV_Post((JSONObject) jsonArr.get(i));
 				getDatabase().insert(Constants.TABLE_PLACE_POST, null, cv);
 			} catch (Exception e) {
 				Log.e(Constants.LOG_TAG, LOG_STORING_DATA_ERROR, e);
 				return Constants.ERROR_SQLITE;
 			}
 		}
-		return Constants.ERROR_UNKOWN;
+		return ErrorCode.ERROR_SUCCESS;
+	}
+
+	public int storeFollowedPlaces(JSONArray jsonArr) {
+		return cleanAndStorePlaces(jsonArr, Constants.TABLE_FOLLOWED_PLACE);
 	}
 
 	public int storeNearbyPlaces(JSONArray jsonArr) {
+		return cleanAndStorePlaces(jsonArr, Constants.TABLE_NEARBY_PLACE);
+	}
+
+	private int cleanAndStorePlaces(JSONArray jsonArr, String table) {
 		int len = jsonArr.length();
 		if (len <= 0) {
 			Log.w(Constants.LOG_TAG, LOG_ERROR_NO_DATA);
 			return Constants.ERROR_RESP_DATA_EMPTY;
 		}
 
+		Log.d(Constants.LOG_TAG, "Start to cleanup and store info for table: " + table);
+		getDatabase().delete(table, null, null);
+		
 		ContentValues cv = null;
-		cleanupNearbyPlaces(); // only keep the latest data
 		for (int i = 0; i < len; i++) {
 			try {
-				cv = SqlLiteMappingHelper.mapJsonToCV_Place((JSONObject) jsonArr.get(i));
-				getDatabase().insert(Constants.TABLE_NEARBY_PLACE, null, cv);
+				cv = MappingHelper.mapJsonToCV_Place((JSONObject) jsonArr.get(i));
+				getDatabase().insert(table, null, cv);
 			} catch (Exception e) {
 				Log.e(Constants.LOG_TAG, LOG_STORING_DATA_ERROR, e);
 				return Constants.ERROR_SQLITE;
 			}
 		}
-		return Constants.ERROR_UNKOWN;
+		return ErrorCode.ERROR_SUCCESS;
 	}
 
 	public void cleanupPlacePosts(String placeId) {
@@ -105,27 +117,30 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		getDatabase().delete(Constants.TABLE_PLACE_POST, whereClause, whereArgs);
 	}
 
-	public void cleanupNearbyPlaces() {
-		Log.d(Constants.LOG_TAG, "Cleanup nearby places in DB.");
-		getDatabase().delete(Constants.TABLE_NEARBY_PLACE, null, null);
-	}
-
 	public void getPlacePosts(List<Map<String, Object>> list, String placeId) {
 		List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
 		Cursor cur = queryPlacePosts(placeId);
 		while (cur.moveToNext()) {
-			tmpList.add(SqlLiteMappingHelper.mapCursorToMap_Post(cur));
+			tmpList.add(MappingHelper.mapCursorToMap_Post(cur));
 		}
 		cur.close();
 
 		checkAndUpdateList(list, tmpList);
 	}
 
+	public void getFollowedPlaces(List<Map<String, Object>> list) {
+		getPlaces(list, Constants.TABLE_FOLLOWED_PLACE);
+	}
+
 	public void getNearbyPlaces(List<Map<String, Object>> list) {
+		getPlaces(list, Constants.TABLE_NEARBY_PLACE);
+	}
+
+	private void getPlaces(List<Map<String, Object>> list, String table) {
 		List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
-		Cursor cur = queryNearbyPlaces();
+		Cursor cur = queryPlaces(table);
 		while (cur.moveToNext()) {
-			tmpList.add(SqlLiteMappingHelper.mapCursorToMap_Place(cur));
+			tmpList.add(MappingHelper.mapCursorToMap_Place(cur));
 		}
 		cur.close();
 
@@ -153,12 +168,12 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		return cursor;
 	}
 
-	private Cursor queryNearbyPlaces() {
+	private Cursor queryPlaces(String table) {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
-		queryBuilder.setTables(Constants.TABLE_NEARBY_PLACE);
+		queryBuilder.setTables(table);
 
 		Cursor cursor = queryBuilder.query(getDatabase(), null, null, null, null, null, null);
-		Log.d(Constants.LOG_TAG, "Query place list from DB. Amount: " + cursor.getCount());
+		Log.d(Constants.LOG_TAG, "Query place list from table: " + table + ", with result: " + cursor);
 		return cursor;
 	}
 

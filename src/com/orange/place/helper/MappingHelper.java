@@ -14,7 +14,7 @@ import com.orange.place.constant.ServiceConstant;
 import com.orange.place.constants.Constants;
 import com.orange.utils.JsonUtil;
 
-public class SqlLiteMappingHelper {
+public class MappingHelper {
 
 	public static ContentValues mapJsonToCV_Place(JSONObject json) {
 		ContentValues cv = new ContentValues();
@@ -44,6 +44,32 @@ public class SqlLiteMappingHelper {
 		return place;
 	}
 
+	public static Map<String, Object> mapJsonToMap_Post(JSONObject json) {
+		Map<String, Object> post = new HashMap<String, Object>();
+		post.put(DBConstants.F_POSTID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_POSTID));
+		post.put(DBConstants.F_USERID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_USERID));
+		post.put(DBConstants.F_PLACEID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_PLACEID));
+		post.put(DBConstants.F_LONGITUDE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_LONGTITUDE));
+		post.put(DBConstants.F_LATITUDE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_LATITUDE));
+		post.put(DBConstants.F_USER_LONGITUDE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_USER_LONGITUDE));
+		post.put(DBConstants.F_USER_LATITUDE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_USER_LATITUDE));
+		post.put(DBConstants.F_TEXT_CONTENT, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TEXT_CONTENT));
+		post.put(DBConstants.F_CONTENT_TYPE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_CONTENT_TYPE));
+		post.put(DBConstants.F_IMAGE_URL, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_IMAGE_URL));
+		post.put(DBConstants.F_TOTAL_VIEW, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TOTAL_VIEW));
+		post.put(DBConstants.F_TOTAL_FORWARD, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TOTAL_FORWARD));
+		post.put(DBConstants.F_TOTAL_QUOTE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TOTAL_QUOTE));
+		post.put(DBConstants.F_TOTAL_REPLY, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TOTAL_REPLY));
+		post.put(DBConstants.F_CREATE_DATE, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_CREATE_DATE));
+		post.put(DBConstants.F_SRC_POSTID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_SRC_POSTID));
+		post.put(DBConstants.F_NICKNAME, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_NICKNAME));
+		post.put(DBConstants.F_AVATAR, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_AVATAR));
+		post.put(DBConstants.C_TOTAL_RELATED, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_TOTAL_RELATED));
+		post.put(DBConstants.F_NAME, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_NAME));
+		post.put("UserImage", R.drawable.z_tmp_icon1); // change it !
+		return post;
+	}
+	
 	public static ContentValues mapJsonToCV_Post(JSONObject json) {
 		ContentValues cv = new ContentValues();
 		cv.put(DBConstants.F_POSTID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_POSTID));
@@ -118,7 +144,7 @@ public class SqlLiteMappingHelper {
 			+ DBConstants.F_NAME + " TEXT" // don't have "," for last one !
 			+ ");";
 
-	public static final String SQL_CREATE_NEARBY_PLACE = "CREATE TABLE " + Constants.TABLE_NEARBY_PLACE + " (" //
+	private static final String SQL_CREATE_PLACE = " (" //
 			+ DBConstants.F_PLACEID + " TEXT PRIMARY KEY, " //
 			+ DBConstants.F_CREATE_DATE + " TEXT, " //
 			+ DBConstants.F_RADIUS + " TEXT, " //
@@ -129,4 +155,8 @@ public class SqlLiteMappingHelper {
 			+ DBConstants.F_LONGITUDE + " TEXT, " //
 			+ DBConstants.F_USERID + " TEXT" // don't have "," for last one !
 			+ ");";
+	public static final String SQL_CREATE_FOLLOWED_PLACE = "CREATE TABLE " + Constants.TABLE_FOLLOWED_PLACE
+			+ SQL_CREATE_PLACE;
+	public static final String SQL_CREATE_NEARBY_PLACE = "CREATE TABLE " + Constants.TABLE_NEARBY_PLACE
+			+ SQL_CREATE_PLACE;
 }

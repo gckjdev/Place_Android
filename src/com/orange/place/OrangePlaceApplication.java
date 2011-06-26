@@ -14,7 +14,7 @@ public class OrangePlaceApplication extends DroidFuApplication {
 		return gVar.get(key);
 	}
 	
-	public static void setGlobalVar(String key, String value){
+	public static void setGlobalVar(String key, Object value){
 		gVar.put(key, value);
 	}
 }

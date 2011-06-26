@@ -30,7 +30,7 @@ public class Activity_Main extends TabActivity {
 
 		tabHost = getTabHost();
 		TabsUtil.addTab(tabHost, getString(R.string.main_tab_1), R.drawable.main_tab_1_nav, 1, new Intent(this,
-				Activity_Place.class));
+				Activity_Places.class));
 		TabsUtil.addTab(tabHost, getString(R.string.main_tab_2), R.drawable.main_tab_2_nav, 2, new Intent(this,
 				MainTab2Activity.class));
 		TabsUtil.addTab(tabHost, getString(R.string.main_tab_3), R.drawable.main_tab_3_nav, 3, new Intent(this,

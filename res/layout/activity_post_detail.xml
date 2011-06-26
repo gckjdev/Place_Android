@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@android:color/white" android:layout_height="fill_parent"
+	android:layout_width="fill_parent" android:orientation="vertical">
+
+	<RelativeLayout android:gravity="center_vertical"
+		android:layout_gravity="top" android:background="@drawable/title_lightgray_bg"
+		android:layout_width="fill_parent" android:layout_height="45dip">
+		<LinearLayout android:gravity="center"
+			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
+			android:layout_marginLeft="16dip" android:layout_alignParentLeft="true"
+			android:orientation="horizontal" android:layout_width="50dip"
+			android:layout_height="wrap_content">
+			<Button android:id="@+id/go_back" android:textSize="12sp"
+				android:textColor="#FFFFFF" android:background="@drawable/title_button"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:text="@string/go_back" android:gravity="center"
+				android:layout_centerVertical="true" />
+		</LinearLayout>
+		<TextView android:text="@string/place_post_list"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center" android:textSize="18sp"
+			android:layout_centerInParent="true" android:textColor="#FFFFFF"
+			android:textStyle="bold" />
+		<LinearLayout android:gravity="center"
+			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
+			android:layout_marginRight="16dip" android:layout_alignParentRight="true"
+			android:orientation="horizontal" android:layout_width="50dip"
+			android:layout_height="wrap_content">
+			<Button android:id="@+id/reply" android:textSize="12sp"
+				android:textColor="@android:color/black" android:background="@drawable/title_button"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:text="@string/reply" android:gravity="center"
+				android:layout_centerVertical="true" />
+		</LinearLayout>
+	</RelativeLayout>
+
+	<LinearLayout android:layout_width="wrap_content"
+		android:layout_height="60dp" android:orientation="horizontal"
+		android:layout_margin="10dp" android:background="@android:color/darker_gray">
+		<include layout="@layout/item_post" />
+	</LinearLayout>
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:layout_gravity="top">
+		<TextView android:text="@string/related_post"
+			android:layout_gravity="left" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_margin="12dip"
+			android:textSize="20sp" android:clickable="true" />
+	</LinearLayout>
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_gravity="top">
+		<ListView android:id="@android:id/list" android:layout_width="fill_parent"
+			android:layout_height="fill_parent" android:dividerHeight="1.5dp" />
+	</LinearLayout>
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="fill_parent" android:layout_width="fill_parent"
+		android:layout_gravity="top">
+		<TextView android:id="@+id/refresh" android:text="@string/refresh"
+			android:layout_gravity="center" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_marginBottom="25dip"
+			android:layout_marginTop="16dip" android:textSize="24sp"
+			android:clickable="true" />
+	</LinearLayout>
+
+</LinearLayout>

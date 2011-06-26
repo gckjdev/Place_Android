@@ -5,9 +5,9 @@
 
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="wrap_content" android:layout_height="wrap_content">
-		<ImageView android:id="@+id/UserImage" android:layout_width="wrap_content"
+		<ImageView android:id="@+id/user_image" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" />
-		<TextView android:id="@+id/UserId" android:layout_width="wrap_content"
+		<TextView android:id="@+id/user_id" android:layout_width="wrap_content"
 			android:layout_alignParentRight="true"
 			android:layout_alignParentBottom="true" android:layout_height="wrap_content"
 			android:maxLines="1" android:maxWidth="60dp" android:ellipsize="marquee"
@@ -17,18 +17,18 @@
 	<LinearLayout android:orientation="vertical"
 		android:layout_weight="1" android:layout_width="wrap_content"
 		android:layout_height="wrap_content">
-		<TextView android:id="@+id/PostContent" android:layout_width="wrap_content"
+		<TextView android:id="@+id/post_content" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:layout_alignParentLeft="true"
 			android:textColor="@android:color/black" android:textSize="15sp" />
 	</LinearLayout>
 
 	<LinearLayout android:orientation="vertical"
 		android:layout_width="wrap_content" android:layout_height="wrap_content">
-		<TextView android:id="@+id/PostTime" android:layout_width="wrap_content"
+		<TextView android:id="@+id/post_time" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:maxLines="1"
 			android:layout_alignParentLeft="true" android:ellipsize="marquee"
 			android:textColor="@android:color/black" android:textSize="15sp" />
-		<TextView android:id="@+id/PostRelated" android:layout_width="wrap_content"
+		<TextView android:id="@+id/post_related" android:layout_width="wrap_content"
 			android:layout_height="wrap_content" android:maxLines="1"
 			android:layout_alignParentLeft="true" android:ellipsize="marquee"
 			android:textColor="@android:color/black" android:textSize="15sp" />

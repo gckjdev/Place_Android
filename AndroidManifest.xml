@@ -24,9 +24,11 @@
 
 		<activity android:name="Activity_Main" android:label="@string/app_name">
 		</activity>
-		<activity android:name="Activity_Place" android:label="@string/app_name">
+		<activity android:name="Activity_Places" android:label="@string/app_name">
 		</activity>
-		<activity android:name="Activity_Place_Post" android:label="@string/app_name">
+		<activity android:name="Activity_PlacePosts" android:label="@string/app_name">
+		</activity>
+		<activity android:name="Activity_PostDetail" android:label="@string/app_name">
 		</activity>
 		<activity android:name="MainTab2Activity" android:label="@string/app_name">
 		</activity>
