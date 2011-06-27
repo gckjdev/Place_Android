@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
@@ -36,12 +35,10 @@ public class Activity_Places extends BetterListActivity {
 
 	private List<Map<String, Object>> places = new ArrayList<Map<String, Object>>();
 	private SimpleAdapter placesAdapter;
-	private ImageButton bNewPlace;
-	private Button bNearbyPlace;
-	private Button bFollowedPlace;
+	private ImageButton bPlaceNew;
+	private Button bPlaceNearby;
+	private Button bPlaceFollowed;
 	private TextView tMore;
-	private String[] placeListFrom = new String[] { DBConstants.F_NAME, DBConstants.F_DESC, DBConstants.F_USERID };
-	private int[] placeListTo = new int[] { R.id.place_name, R.id.place_desc, R.id.user_id };
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -50,11 +47,11 @@ public class Activity_Places extends BetterListActivity {
 
 		ActivityUtil.setNoTitle(this);
 		ActivityUtil.setFullScreen(this);
-
 		setContentView(R.layout.activity_places);
 		lookupViewElements();
 
-		placesAdapter = new SimpleAdapter(this, places, R.layout.item_place, placeListFrom, placeListTo);
+		placesAdapter = new SimpleAdapter(this, places, R.layout.item_place, Constants.placeViewFrom,
+				Constants.placeViewTo);
 		setListAdapter(placesAdapter);
 
 		showNearbyPlaces();
@@ -68,28 +65,20 @@ public class Activity_Places extends BetterListActivity {
 
 	private void showNearbyPlaces() {
 		Log.d(Constants.LOG_TAG, "Start to show Nearby place");
-
-		// firstly show what we have in DB
 		places.clear();
-		updateNearbyPlacesView();
-
-		// then, try get newest place list async
-		asyncGetNearbyPlaces();
+		updateNearbyPlacesView(); // firstly show what we have in DB
+		asyncGetNearbyPlaces(); // then, try get newest place list async
 	}
 
 	private void showFollowedPlaces() {
 		Log.d(Constants.LOG_TAG, "Start to show Followed place");
-
-		// firstly show what we have in DB
 		places.clear();
-		updateFollowedPlacesView();
-
-		// then, try get followed place list async
-		asyncGetFollowedPlaces();
+		updateFollowedPlacesView(); // firstly show what we have in DB
+		asyncGetFollowedPlaces(); // then, try get newest place list async
 	}
 
 	private void setNewPlaceListener() {
-		bNewPlace.setOnClickListener(new View.OnClickListener() {
+		bPlaceNew.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				ToastUtil.makeNotImplToast(Activity_Places.this);
@@ -107,40 +96,30 @@ public class Activity_Places extends BetterListActivity {
 	}
 
 	private void setFollowedPlaceListener() {
-		bFollowedPlace.setOnTouchListener(new OnTouchListener() {
+		bPlaceFollowed.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-                if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
-                	showFollowedPlaces();
-                    return true;
-                }
-                return false;
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					showFollowedPlaces();
+					return true;
+				}
+				return false;
 			}
 		});
 	}
 
 	private void setNearbyPlaceListener() {
-		bNearbyPlace.setOnTouchListener(new OnTouchListener() {
+		bPlaceNearby.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
-                if ( event.getAction() == MotionEvent.ACTION_DOWN ) {
-                	showNearbyPlaces();
-                    return true;
-                }
-                return false;
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					showNearbyPlaces();
+					return true;
+				}
+				return false;
 			}
 		});
 	}
-
-	// private void setNearbyPlaceListener() {
-	// bNearbyPlace.setOnClickListener(new Button.OnClickListener() {
-	// @Override
-	// public void onClick(View v) {
-	// Log.d(Constants.LOG_TAG, "User select to show nearby place");
-	// showNearbyPlaces();
-	// }
-	// });
-	// }
 
 	private void setRefreshListener() {
 		tMore.setOnClickListener(new View.OnClickListener() {
@@ -257,9 +236,9 @@ public class Activity_Places extends BetterListActivity {
 	}
 
 	private void lookupViewElements() {
-		bNewPlace = (ImageButton) findViewById(R.id.place_new);
 		tMore = (TextView) findViewById(R.id.more);
-		bNearbyPlace = (Button) findViewById(R.id.place_around);
-		bFollowedPlace = (Button) findViewById(R.id.place_followed);
+		bPlaceNew = (ImageButton) findViewById(R.id.place_new);
+		bPlaceNearby = (Button) findViewById(R.id.place_around);
+		bPlaceFollowed = (Button) findViewById(R.id.place_followed);
 	}
 }

@@ -55,12 +55,8 @@ public class Activity_PlacePosts extends BetterListActivity {
 
 		// firstly show what we have in DB
 		PlaceTask.getPlacePostsFromDB(this, placePosts, placeId);
-		String[] placePostsFrom = new String[] { "UserImage", DBConstants.F_TEXT_CONTENT, DBConstants.F_USERID,
-				DBConstants.F_CREATE_DATE, DBConstants.C_TOTAL_RELATED };
-		int[] placePostsTo = new int[] { R.id.user_image, R.id.post_content, R.id.user_id, R.id.post_time,
-				R.id.post_related };
-		placePostsAdapter = new SimpleAdapter(this, placePosts, R.layout.item_post, placePostsFrom,
-				placePostsTo);
+		placePostsAdapter = new SimpleAdapter(this, placePosts, R.layout.item_post, Constants.postsViewFrom,
+				Constants.postsViewTo);
 		setListAdapter(placePostsAdapter);
 
 		// then get newest posts async
@@ -111,7 +107,7 @@ public class Activity_PlacePosts extends BetterListActivity {
 		Log.d(Constants.LOG_TAG, "Updating place post list view with: " + placePosts);
 		placePostsAdapter.notifyDataSetChanged();
 	}
-	
+
 	private class AsyncGetPlacePostsTask extends BetterAsyncTask<Void, Void, Integer> {
 		private String placeId;
 

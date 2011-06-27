@@ -1,12 +1,14 @@
 package com.orange.place.constants;
 
+import com.orange.place.R;
+import com.orange.place.constant.DBConstants;
 import com.orange.utils.UtilConstants;
 
 public class Constants {
 
 	// server side
-	public static final String SERVER_HTTP = "http://192.168.1.160:8000";
-	// public static final String SERVER_HTTP = "http://192.168.0.67:8000";
+	// public static final String SERVER_HTTP = "http://192.168.1.160:8000";
+	public static final String SERVER_HTTP = "http://192.168.0.67:8000";
 	public static final String CONTEXT_PATH = "/api/i";
 
 	// sqlite database
@@ -32,6 +34,14 @@ public class Constants {
 	public static final int ERROR_LOCATION_UNKNOWN = 70005;
 	public static final int ERROR_PLACEID_UNKNOWN = 70006;
 	public static final int ERROR_SQLITE = 70006;
+
+	// list view mapping
+	public static String[] postsViewFrom = new String[] { "UserImage", DBConstants.F_TEXT_CONTENT, DBConstants.F_USERID,
+			DBConstants.F_CREATE_DATE, DBConstants.C_TOTAL_RELATED };
+	public static int[] postsViewTo = new int[] { R.id.user_image, R.id.post_content, R.id.user_id, R.id.post_time,
+			R.id.post_related };
+	public static String[] placeViewFrom = new String[] { DBConstants.F_NAME, DBConstants.F_DESC, DBConstants.F_USERID };
+	public static int[] placeViewTo = new int[] { R.id.place_name, R.id.place_desc, R.id.user_id };
 
 	// this set constant in Utils, but not mandatory
 	public static void initUtilsConstants() {

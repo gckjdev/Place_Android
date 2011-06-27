@@ -1,29 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:background="@android:color/white" android:layout_height="fill_parent"
+	android:background="@color/background" android:layout_height="fill_parent"
 	android:layout_width="fill_parent" android:orientation="vertical">
 
 	<RelativeLayout android:gravity="center_vertical"
 		android:layout_gravity="top" android:background="@drawable/title_lightgray_bg"
 		android:layout_width="fill_parent" android:layout_height="45dip">
 		<LinearLayout android:gravity="center"
-			android:layout_marginLeft="100dip" android:layout_marginRight="100dip"
+			android:layout_marginLeft="80dip" android:layout_marginRight="80dip"
 			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
 			android:orientation="horizontal" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
-			<Button android:id="@+id/place_around" android:textSize="12sp"
+			<Button android:id="@+id/post_around" android:textSize="12sp"
 				android:textColor="#FFFFFF" android:background="@drawable/title_button_group_left"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="@string/place_around" android:layout_weight="1.0"
-				android:focusableInTouchMode="true">
-				<requestFocus />
-			</Button>
+				android:text="@string/post_around" android:layout_weight="1.0" android:focusableInTouchMode="true" >
+  <requestFocus />
+</Button>
 
-			<Button android:id="@+id/place_followed" android:textSize="12sp"
+			<Button android:id="@+id/post_followed" android:textSize="12sp"
+				android:textColor="#FFFFFF" android:background="@drawable/title_button_group_middle"
+				android:layout_width="wrap_content" android:layout_height="wrap_content"
+				android:text="@string/followed" android:layout_weight="1.0" android:focusableInTouchMode="true" />
+			<Button android:id="@+id/post_replied" android:textSize="12sp"
 				android:textColor="#FFFFFF" android:background="@drawable/title_button_group_right"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="@string/followed" android:layout_weight="1.0"
-				android:focusableInTouchMode="true" />
+				android:text="@string/post_replied" android:layout_weight="1.0" android:focusableInTouchMode="true" />
 		</LinearLayout>
 		<LinearLayout android:gravity="right|center_vertical"
 			android:layout_alignParentRight="true" android:layout_marginRight="12dip"
@@ -31,7 +33,7 @@
 			android:orientation="horizontal" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
 			<ImageButton android:layout_height="30dp" android:src="@drawable/item_add"
-				android:layout_width="30dp" android:id="@+id/place_new"></ImageButton>
+				android:layout_width="30dp" android:id="@+id/post_new"></ImageButton>
 		</LinearLayout>
 	</RelativeLayout>
 
