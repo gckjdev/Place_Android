@@ -133,6 +133,29 @@ public class UriHelper {
 		return uri;
 	}
 
+	public static Uri createNewPostUri(String userId, String placeId, String postContent, double longitude,
+			double latitude, int contentType, String syncSns, String srcPostId, String replyPostId) {
+		Builder uriBase = getHttpBaseUriBuilder();
+
+		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_CREATEPOST);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_PLACEID, placeId);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_LONGTITUDE, String.valueOf(longitude));
+		uriBase.appendQueryParameter(ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
+		uriBase.appendQueryParameter(ServiceConstant.PARA_USER_LONGITUDE, String.valueOf(longitude));
+		uriBase.appendQueryParameter(ServiceConstant.PARA_USER_LATITUDE, String.valueOf(latitude));
+		uriBase.appendQueryParameter(ServiceConstant.PARA_TEXT_CONTENT, postContent);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_CONTENT_TYPE, String.valueOf(contentType));
+		uriBase.appendQueryParameter(ServiceConstant.PARA_SYNC_SNS, syncSns);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_SRC_POSTID, srcPostId);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_REPLY_POSTID, replyPostId);
+
+		Uri uri = uriBase.build();
+		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
+		return uri;
+	}
+
 	public static Uri createNewPlacesUri(String userId, String placeName, String placeDesc, double longitude,
 			double latitude, double radius, String postType) {
 		Builder uriBase = getHttpBaseUriBuilder();

@@ -163,7 +163,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		}
 		cur.close();
 
-		checkAndUpdateList(list, tmpList);
+		replaceList(list, tmpList);
 	}
 
 	public void getNearbyPosts(List<Map<String, Object>> list) {
@@ -186,7 +186,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		}
 		cur.close();
 
-		checkAndUpdateList(list, tmpList);
+		replaceList(list, tmpList);
 	}
 
 	public void getFollowedPlaces(List<Map<String, Object>> list) {
@@ -205,10 +205,10 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		}
 		cur.close();
 
-		checkAndUpdateList(list, tmpList);
+		replaceList(list, tmpList);
 	}
 
-	private void checkAndUpdateList(List<Map<String, Object>> list, List<Map<String, Object>> tmpList) {
+	private void replaceList(List<Map<String, Object>> list, List<Map<String, Object>> tmpList) {
 		if (tmpList.size() != 0) {
 			list.clear();
 			list.addAll(tmpList);

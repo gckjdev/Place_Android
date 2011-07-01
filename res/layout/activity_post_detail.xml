@@ -17,7 +17,7 @@
 				android:text="@string/go_back" android:gravity="center"
 				android:layout_centerVertical="true" />
 		</LinearLayout>
-		<TextView android:text="@string/place_post_list"
+		<TextView android:text="@string/post_detail"
 			android:layout_width="wrap_content" android:layout_height="wrap_content"
 			android:layout_gravity="center" android:textSize="18sp"
 			android:layout_centerInParent="true" android:textColor="#FFFFFF"
@@ -35,11 +35,11 @@
 		</LinearLayout>
 	</RelativeLayout>
 
-	<LinearLayout android:layout_width="wrap_content"
-		android:layout_height="60dp" android:orientation="horizontal"
+	<RelativeLayout android:layout_width="fill_parent"
+		android:layout_height="wrap_content" android:orientation="horizontal"
 		android:layout_margin="10dp" android:background="@android:color/darker_gray">
 		<include layout="@layout/item_post" />
-	</LinearLayout>
+	</RelativeLayout>
 
 	<LinearLayout android:orientation="vertical"
 		android:layout_height="wrap_content" android:layout_width="wrap_content"

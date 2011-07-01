@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="@color/background" android:layout_height="fill_parent"
+	android:layout_width="fill_parent" android:orientation="vertical">
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_gravity="bottom">
+		<TextView android:layout_width="fill_parent" android:text="@string/create_new_post"
+			android:layout_height="wrap_content" android:layout_marginTop="20dip"
+			android:textSize="18sp" />
+	</LinearLayout>
+
+	<LinearLayout android:orientation="vertical"
+		android:layout_height="wrap_content" android:layout_width="fill_parent"
+		android:layout_gravity="top">
+		<EditText android:layout_width="fill_parent"
+			android:layout_height="wrap_content" android:id="@+id/post_content"
+			android:hint="@string/post_content" />
+		<Button android:id="@+id/create" android:text="@string/create"
+			android:layout_width="wrap_content" android:layout_height="wrap_content" />
+		<TextView android:id="@+id/error_info"
+			android:layout_gravity="center" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_marginTop="20dip"
+			android:layout_marginLeft="20dip" android:textSize="15sp" />
+	</LinearLayout>
+
+</LinearLayout>

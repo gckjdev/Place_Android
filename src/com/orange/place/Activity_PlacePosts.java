@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
@@ -31,6 +32,7 @@ public class Activity_PlacePosts extends BetterListActivity {
 	private List<Map<String, Object>> placePosts = new ArrayList<Map<String, Object>>();
 	private SimpleAdapter placePostsAdapter;
 	private Button bGoBack;
+	private ImageButton bNewPost;
 	private TextView tRefresh;
 	private TextView tPlaceName;
 	private TextView tPlaceDesc;
@@ -65,6 +67,18 @@ public class Activity_PlacePosts extends BetterListActivity {
 		setRefreshListener();
 		setListItemListener();
 		setGoBackListener();
+		setNewPlaceListener();
+	}
+
+	private void setNewPlaceListener() {
+		bNewPost.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Activity_PlacePosts.this, Activity_NewPost.class);
+				intent.putExtra(DBConstants.F_PLACEID, placeId);
+				startActivity(intent);
+			}
+		});
 	}
 
 	private void setGoBackListener() {
@@ -161,6 +175,7 @@ public class Activity_PlacePosts extends BetterListActivity {
 
 	private void lookupAndSetViewElements() {
 		bGoBack = (Button) findViewById(R.id.go_back);
+		bNewPost = (ImageButton) findViewById(R.id.post_new);
 		tRefresh = (TextView) findViewById(R.id.refresh);
 		tPlaceName = (TextView) findViewById(R.id.place_name);
 		tPlaceName.setText(placeName);

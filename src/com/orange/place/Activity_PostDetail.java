@@ -116,9 +116,11 @@ public class Activity_PostDetail extends BetterListActivity {
 
 	private void updateRelatedPostsView() {
 		List<Map<String, Object>> posts = GlobalVarHelper.getRelatedPosts(postId);
-		if (posts.size() <= 0) {
+		if (posts == null || posts.size() <= 0) {
 			Log.w(Constants.LOG_TAG, "related post in global var is empty , will not update view!");
+			return;
 		}
+		relatedPosts.clear();
 		relatedPosts.addAll(posts);
 		Log.d(Constants.LOG_TAG, "Updating place post list view with: " + relatedPosts);
 		relatedPostAdapter.notifyDataSetChanged();
