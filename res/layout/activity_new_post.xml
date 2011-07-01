@@ -3,26 +3,86 @@
 	android:background="@color/background" android:layout_height="fill_parent"
 	android:layout_width="fill_parent" android:orientation="vertical">
 
-	<LinearLayout android:orientation="vertical"
-		android:layout_height="wrap_content" android:layout_width="fill_parent"
-		android:layout_gravity="bottom">
-		<TextView android:layout_width="fill_parent" android:text="@string/create_new_post"
-			android:layout_height="wrap_content" android:layout_marginTop="20dip"
-			android:textSize="18sp" />
-	</LinearLayout>
+	<RelativeLayout android:gravity="center_vertical"
+		android:layout_gravity="top" android:background="@drawable/title_lightgray_bg"
+		android:layout_width="fill_parent" android:layout_height="45dip">
+		<LinearLayout android:gravity="center"
+			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
+			android:layout_marginLeft="16dip" android:layout_alignParentLeft="true"
+			android:orientation="horizontal" android:layout_width="50dip"
+			android:layout_height="wrap_content">
+			<Button android:id="@+id/go_back" android:textSize="12sp"
+				android:textColor="#FFFFFF" android:background="@drawable/title_button"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:text="@string/go_back" android:gravity="center"
+				android:layout_centerVertical="true" />
+		</LinearLayout>
+		<TextView android:text="@string/create_new_post"
+			android:layout_width="wrap_content" android:layout_height="wrap_content"
+			android:layout_gravity="center" android:textSize="18sp"
+			android:layout_centerInParent="true" android:textColor="#FFFFFF"
+			android:textStyle="bold" />
+		<LinearLayout android:gravity="center"
+			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
+			android:layout_marginRight="16dip" android:layout_alignParentRight="true"
+			android:orientation="horizontal" android:layout_width="50dip"
+			android:layout_height="wrap_content">
+			<Button android:id="@+id/post" android:textSize="12sp"
+				android:textColor="@android:color/black" android:background="@drawable/title_button"
+				android:layout_width="fill_parent" android:layout_height="fill_parent"
+				android:text="@string/post" android:gravity="center"
+				android:layout_centerVertical="true" />
+		</LinearLayout>
+	</RelativeLayout>
 
-	<LinearLayout android:orientation="vertical"
-		android:layout_height="wrap_content" android:layout_width="fill_parent"
-		android:layout_gravity="top">
-		<EditText android:layout_width="fill_parent"
-			android:layout_height="wrap_content" android:id="@+id/post_content"
-			android:hint="@string/post_content" />
-		<Button android:id="@+id/create" android:text="@string/create"
-			android:layout_width="wrap_content" android:layout_height="wrap_content" />
-		<TextView android:id="@+id/error_info"
-			android:layout_gravity="center" android:layout_height="wrap_content"
-			android:layout_width="wrap_content" android:layout_marginTop="20dip"
-			android:layout_marginLeft="20dip" android:textSize="15sp" />
-	</LinearLayout>
+	<RelativeLayout android:orientation="horizontal"
+		android:layout_alignParentLeft="true" android:layout_height="wrap_content"
+		android:layout_width="fill_parent">
+		<LinearLayout android:id="@+id/edit_text_layout"
+			android:orientation="vertical" android:layout_weight="1"
+			android:layout_height="wrap_content" android:layout_width="wrap_content"
+			android:layout_gravity="center" android:layout_margin="8dp">
+			<LinearLayout android:gravity="left"
+				android:layout_marginLeft="8dip" android:layout_marginTop="8dip"
+				android:layout_marginBottom="8dip" android:orientation="horizontal"
+				android:layout_width="wrap_content" android:layout_height="wrap_content">
+				<Button android:id="@+id/text" android:textSize="12sp"
+					android:textColor="#FFFFFF" android:background="@drawable/title_button_group_left"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/text" android:layout_weight="1.0"
+					android:focusableInTouchMode="true">
+					<requestFocus />
+				</Button>
+				<Button android:id="@+id/picture" android:textSize="12sp"
+					android:textColor="#FFFFFF" android:background="@drawable/title_button_group_right"
+					android:layout_width="wrap_content" android:layout_height="wrap_content"
+					android:text="@string/picture" android:layout_weight="1.0"
+					android:focusableInTouchMode="true" />
+			</LinearLayout>
+			<EditText android:layout_width="fill_parent"
+				android:layout_height="wrap_content" android:lines="5"
+				android:id="@+id/post_content" android:hint="@string/post_content" />
+		</LinearLayout>
+		<LinearLayout android:orientation="vertical"
+			android:layout_alignParentRight="true" android:layout_height="wrap_content"
+			android:layout_width="wrap_content" android:layout_margin="8dp">
+			<Button android:id="@+id/take_photo" android:text="@string/take_photo"
+				android:textColor="@android:color/black" android:background="@drawable/title_button"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" />
+			<Button android:id="@+id/photo_gallery" android:text="@string/photo_gallery"
+				android:textColor="@android:color/black" android:background="@drawable/title_button"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" />
+			<Button android:id="@+id/weibo" android:text="@string/weibo"
+				android:textColor="@android:color/black" android:background="@drawable/title_button"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" />
+			<Button android:id="@+id/place" android:text="@string/place"
+				android:textColor="@android:color/black" android:background="@drawable/title_button"
+				android:layout_width="wrap_content" android:layout_height="wrap_content" />
+		</LinearLayout>
+	</RelativeLayout>
 
+	<TextView android:id="@+id/error_info" android:layout_gravity="center"
+		android:layout_height="wrap_content" android:layout_width="wrap_content"
+		android:layout_marginTop="20dip" android:layout_marginLeft="20dip"
+		android:textSize="15sp" />
 </LinearLayout>

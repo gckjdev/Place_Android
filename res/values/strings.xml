@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 	<string name="app_name">地盘100</string>
+	<string name="place">地盘</string>
 	<string name="confirm">确定</string>
 	<string name="more">更多...</string>
 	<string name="create">创建</string>
+	<string name="post">发表</string>
+	<string name="take_photo">拍照</string>
+	<string name="photo_gallery">相册</string>
+	<string name="weibo">微博</string>
+	<string name="text">文本</string>
+	<string name="picture">图片</string>
 	
 	<string name="reg_use_other_site">使用已有ID</string>
 	<string name="reg_use_weibo_id">使用微博ID</string>

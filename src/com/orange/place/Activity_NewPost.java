@@ -16,7 +16,7 @@ import com.orange.utils.LocationUtil;
 
 public class Activity_NewPost extends Activity {
 
-	private Button bCreate;
+	private Button bPost;
 	private EditText ePostContent;
 	private TextView tErrorInfo;
 	private String placeId;
@@ -35,7 +35,7 @@ public class Activity_NewPost extends Activity {
 	}
 
 	private void setCreateListener() {
-		bCreate.setOnClickListener(new View.OnClickListener() {
+		bPost.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				int resultCode = PostTask.newPost(Activity_NewPost.this, placeId, ePostContent.getText().toString(),
@@ -53,7 +53,7 @@ public class Activity_NewPost extends Activity {
 	}
 
 	private void lookupViewElements() {
-		bCreate = (Button) findViewById(R.id.create);
+		bPost = (Button) findViewById(R.id.post);
 		ePostContent = (EditText) findViewById(R.id.post_content);
 		tErrorInfo = (TextView) findViewById(R.id.error_info);
 	}
