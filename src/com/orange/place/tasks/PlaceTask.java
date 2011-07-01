@@ -8,6 +8,7 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
+import android.text.Editable;
 import android.util.Log;
 
 import com.orange.place.constant.ErrorCode;
@@ -36,31 +37,31 @@ public class PlaceTask {
 			Log.e(Constants.LOG_TAG, "The postId is null, no request to server!");
 			return Constants.ERROR_PLACEID_UNKNOWN;
 		}
-		
+
 		Uri uri = UriHelper.createGetRelatedPostsUri(PrefHelper.getUserId(context), postId);
 		JSONObject json = HttpUtils.httpGet(uri);
-		
+
 		int resultCode = JsonHelper.getResultCode(json);
 		if (resultCode == ErrorCode.ERROR_SUCCESS) {
-			GlobalVarHelper.storeRelatedPosts(JsonHelper.getReturnDataArray(json), postId); // only stores temporarily 
+			GlobalVarHelper.storeRelatedPosts(JsonHelper.getReturnDataArray(json), postId); // only stores temporarily
 		}
-		
+
 		return resultCode;
 	}
-	
+
 	public static int getFollowedPlacesFromServer(Context context) {
 		Uri uri = UriHelper.createGetFollowedPlacesUri(PrefHelper.getUserId(context));
 		JSONObject json = HttpUtils.httpGet(uri);
-		
+
 		int resultCode = JsonHelper.getResultCode(json);
 		if (resultCode == ErrorCode.ERROR_SUCCESS) {
-			SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context); // improve: not create the helper every time?
+			SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
 			sqlLiteHelper.storeFollowedPlaces(JsonHelper.getReturnDataArray(json));
 		}
-		
+
 		return resultCode;
 	}
-	
+
 	public static int getNearbyPlacesFromServer(Context context, Location location) {
 		if (location == null) {
 			Log.e(Constants.LOG_TAG, "The location is null, no request to server!");
@@ -73,8 +74,27 @@ public class PlaceTask {
 
 		int resultCode = JsonHelper.getResultCode(json);
 		if (resultCode == ErrorCode.ERROR_SUCCESS) {
-			SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context); // improve: not create the helper every time?
+			SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
 			sqlLiteHelper.storeNearbyPlaces(JsonHelper.getReturnDataArray(json));
+		}
+
+		return resultCode;
+	}
+
+	public static int newPlace(Context context, String name, String desc, Location location, double radius,
+			String postType) {
+		if (location == null || name == null || "".equals(name.trim()) || desc == null || "".equals(desc.trim())) {
+			Log.e(Constants.LOG_TAG, "The location/name/desc null or empty, no request to server!");
+			return Constants.ERROR_LOCATION_UNKNOWN;
+		}
+
+		Uri uri = UriHelper.createNewPlacesUri(PrefHelper.getUserId(context), name, desc, location.getLongitude(),
+				location.getLatitude(), radius, postType);
+		JSONObject json = HttpUtils.httpGet(uri);
+
+		int resultCode = JsonHelper.getResultCode(json);
+		if (resultCode == ErrorCode.ERROR_SUCCESS) {
+			// TODO, what todo?
 		}
 
 		return resultCode;

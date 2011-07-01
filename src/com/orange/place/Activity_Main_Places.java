@@ -89,7 +89,7 @@ public class Activity_Main_Places extends BetterListActivity {
 		bNewPlace.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtil.makeNotImplToast(Activity_Main_Places.this);
+				startActivity(new Intent(Activity_Main_Places.this, Activity_NewPlace.class));
 			}
 		});
 	}

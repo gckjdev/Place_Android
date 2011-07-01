@@ -4,7 +4,7 @@
 	
 	<string name="confirm">确定</string>
 	
-	<string name="reg_use_otherSite_id">使用已有ID</string>
+	<string name="reg_use_other_site">使用已有ID</string>
 	<string name="reg_use_weibo_id">使用微博ID</string>
 	<string name="reg_use_renren_id">使用人人ID</string>
 	<string name="reg_input_login_id">或输入您的登陆名（40个字符内，不能含空格？）</string>
@@ -15,6 +15,11 @@
 	<string name="for_dev_only">开发调试使用！</string>
 	
 	<string name="more">更多...</string>
+	<string name="create">创建</string>
+	<string name="create_new_place">创建新地盘</string>
+	<string name="create_place_success">新地盘创建成功！</string>
+	<string name="place_name">地盘名称...</string>
+	<string name="place_desc">地盘描述...</string>
 	<string name="follow">关注</string>
 	<string name="refresh">刷新</string>
 	<string name="reply">回复</string>
