@@ -21,7 +21,7 @@ import com.github.droidfu.concurrent.BetterAsyncTaskCallable;
 import com.orange.place.constant.DBConstants;
 import com.orange.place.constant.ErrorCode;
 import com.orange.place.constants.Constants;
-import com.orange.place.tasks.PlaceTask;
+import com.orange.place.tasks.PostTask;
 import com.orange.utils.ActivityUtil;
 import com.orange.utils.ToastUtil;
 
@@ -54,7 +54,7 @@ public class Activity_PlacePosts extends BetterListActivity {
 		lookupAndSetViewElements();
 
 		// firstly show what we have in DB
-		PlaceTask.getPlacePostsFromDB(this, placePosts, placeId);
+		PostTask.getPlacePostsFromDB(this, placePosts, placeId);
 		placePostsAdapter = new SimpleAdapter(this, placePosts, R.layout.item_post, Constants.postsViewFrom,
 				Constants.postsViewTo);
 		setListAdapter(placePostsAdapter);
@@ -80,7 +80,7 @@ public class Activity_PlacePosts extends BetterListActivity {
 		ListView listView = getListView();
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				showPlacePostDetail(position);
+				showPostDetail(position);
 			}
 		});
 	}
@@ -103,7 +103,7 @@ public class Activity_PlacePosts extends BetterListActivity {
 	}
 
 	private void updatePlacePostsView() {
-		PlaceTask.getPlacePostsFromDB(this, placePosts, placeId);
+		PostTask.getPlacePostsFromDB(this, placePosts, placeId);
 		Log.d(Constants.LOG_TAG, "Updating place post list view with: " + placePosts);
 		placePostsAdapter.notifyDataSetChanged();
 	}
@@ -143,12 +143,12 @@ public class Activity_PlacePosts extends BetterListActivity {
 		public Integer call(BetterAsyncTask<Void, Void, Integer> task) throws Exception {
 			int resultCode = Constants.ERROR_UNKOWN;
 			String placeId = ((AsyncGetPlacePostsTask) task).getPlaceId();
-			resultCode = PlaceTask.getPlacePostsFromServer(Activity_PlacePosts.this, placeId);
+			resultCode = PostTask.getPlacePostsFromServer(Activity_PlacePosts.this, placeId);
 			return resultCode;
 		}
 	}
 
-	public void showPlacePostDetail(int position) {
+	public void showPostDetail(int position) {
 		Map<String, Object> post = placePosts.get(position);
 		Intent intent = new Intent(Activity_PlacePosts.this, Activity_PostDetail.class);
 		intent.putExtra(DBConstants.F_POSTID, (String) post.get(DBConstants.F_POSTID));

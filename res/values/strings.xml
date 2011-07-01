@@ -23,10 +23,10 @@
 	<string name="place_post_list">地盘帖子列表 </string>
 	<string name="place_latest_post">地盘最新帖子</string>
 	<string name="related_post">所有相关帖子</string>
-	<string name="place_around">周边地盘 </string>
+	<string name="nearby_places">周边地盘 </string>
 	<string name="followed">我的关注 </string>
-	<string name="post_around">周边热帖 </string>
-	<string name="post_replied">回复我的 </string>
+	<string name="nearby_posts">周边热帖 </string>
+	<string name="replied_posts">回复我的 </string>
 	
 	<!-- remove following stubs -->
 	<string name="todo">//TODO</string>

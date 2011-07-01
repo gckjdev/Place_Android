@@ -31,14 +31,18 @@ import com.orange.utils.LocationUtil;
 import com.orange.utils.ToastUtil;
 
 //public class Activity_Place extends BetterListActivity { // we might need this for async 
-public class Activity_Places extends BetterListActivity {
+public class Activity_Main_Places extends BetterListActivity {
 
 	private List<Map<String, Object>> places = new ArrayList<Map<String, Object>>();
 	private SimpleAdapter placesAdapter;
-	private ImageButton bPlaceNew;
-	private Button bPlaceNearby;
-	private Button bPlaceFollowed;
+	private ImageButton bNewPlace;
+	private Button bNearbyPlaces;
+	private Button bFollowedPlaces;
 	private TextView tMore;
+	private String currentView;
+
+	private static final String VIEW_NEARBY = "NearbyPlaces";
+	private static final String VIEW_FOLLOWED = "FollowedPlaces";
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -65,23 +69,27 @@ public class Activity_Places extends BetterListActivity {
 
 	private void showNearbyPlaces() {
 		Log.d(Constants.LOG_TAG, "Start to show Nearby place");
+		bNearbyPlaces.requestFocus();
+		currentView = VIEW_NEARBY;
 		places.clear();
-		updateNearbyPlacesView(); // firstly show what we have in DB
-		asyncGetNearbyPlaces(); // then, try get newest place list async
+		updateNearbyPlacesView();
+		asyncGetNearbyPlaces();
 	}
 
 	private void showFollowedPlaces() {
 		Log.d(Constants.LOG_TAG, "Start to show Followed place");
+		bFollowedPlaces.requestFocus();
+		currentView = VIEW_FOLLOWED;
 		places.clear();
-		updateFollowedPlacesView(); // firstly show what we have in DB
-		asyncGetFollowedPlaces(); // then, try get newest place list async
+		updateFollowedPlacesView();
+		asyncGetFollowedPlaces();
 	}
 
 	private void setNewPlaceListener() {
-		bPlaceNew.setOnClickListener(new View.OnClickListener() {
+		bNewPlace.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtil.makeNotImplToast(Activity_Places.this);
+				ToastUtil.makeNotImplToast(Activity_Main_Places.this);
 			}
 		});
 	}
@@ -95,21 +103,8 @@ public class Activity_Places extends BetterListActivity {
 		});
 	}
 
-	private void setFollowedPlaceListener() {
-		bPlaceFollowed.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				if (event.getAction() == MotionEvent.ACTION_DOWN) {
-					showFollowedPlaces();
-					return true;
-				}
-				return false;
-			}
-		});
-	}
-
 	private void setNearbyPlaceListener() {
-		bPlaceNearby.setOnTouchListener(new OnTouchListener() {
+		bNearbyPlaces.setOnTouchListener(new OnTouchListener() {
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if (event.getAction() == MotionEvent.ACTION_DOWN) {
@@ -121,11 +116,28 @@ public class Activity_Places extends BetterListActivity {
 		});
 	}
 
+	private void setFollowedPlaceListener() {
+		bFollowedPlaces.setOnTouchListener(new OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				if (event.getAction() == MotionEvent.ACTION_DOWN) {
+					showFollowedPlaces();
+					return true;
+				}
+				return false;
+			}
+		});
+	}
+
 	private void setRefreshListener() {
 		tMore.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				asyncGetNearbyPlaces();
+				if (VIEW_NEARBY.equals(currentView)) {
+					asyncGetNearbyPlaces();
+				} else if (VIEW_FOLLOWED.equals(currentView)) {
+					asyncGetFollowedPlaces();
+				}
 			}
 		});
 	}
@@ -141,7 +153,7 @@ public class Activity_Places extends BetterListActivity {
 		AsyncGetNearbyPlacesTask getNearbyPlacesTask = new AsyncGetNearbyPlacesTask(this);
 		getNearbyPlacesTask.setCallable(new AsyncGetNearbyPlacesCallable());
 		getNearbyPlacesTask.disableDialog();
-		getNearbyPlacesTask.setLocation(LocationUtil.getCurrentLocation(Activity_Places.this));
+		getNearbyPlacesTask.setLocation(LocationUtil.getCurrentLocation(Activity_Main_Places.this));
 		getNearbyPlacesTask.execute();
 	}
 
@@ -155,26 +167,6 @@ public class Activity_Places extends BetterListActivity {
 		PlaceTask.getFollowedPlacesFromDB(this, places);
 		Log.d(Constants.LOG_TAG, "Updating place list view with place list: " + places);
 		placesAdapter.notifyDataSetChanged();
-	}
-
-	private class AsyncGetFollowedPlacesTask extends BetterAsyncTask<Void, Void, Integer> {
-		public AsyncGetFollowedPlacesTask(Context context) {
-			super(context);
-		}
-
-		@Override
-		protected void handleError(Context context, Exception error) {
-			Log.e(Constants.LOG_TAG, "Error happened in " + getClass().getName(), error);
-		}
-
-		@Override
-		protected void after(Context context, Integer taskResult) {
-			if (taskResult == ErrorCode.ERROR_SUCCESS) {
-				((Activity_Places) context).updateFollowedPlacesView();
-			} else {
-				Log.w(Constants.LOG_TAG, getClass().getName() + " failed, nothing need to update!");
-			}
-		}
 	}
 
 	private class AsyncGetNearbyPlacesTask extends BetterAsyncTask<Void, Void, Integer> {
@@ -192,7 +184,7 @@ public class Activity_Places extends BetterListActivity {
 		@Override
 		protected void after(Context context, Integer taskResult) {
 			if (taskResult == ErrorCode.ERROR_SUCCESS) {
-				((Activity_Places) context).updateNearbyPlacesView();
+				((Activity_Main_Places) context).updateNearbyPlacesView();
 			} else {
 				Log.w(Constants.LOG_TAG, getClass().getName() + " failed, nothing need to update!");
 			}
@@ -207,12 +199,23 @@ public class Activity_Places extends BetterListActivity {
 		}
 	}
 
-	private class AsyncGetFollowedPlacesCallable implements BetterAsyncTaskCallable<Void, Void, Integer> {
+	private class AsyncGetFollowedPlacesTask extends BetterAsyncTask<Void, Void, Integer> {
+		public AsyncGetFollowedPlacesTask(Context context) {
+			super(context);
+		}
+
 		@Override
-		public Integer call(BetterAsyncTask<Void, Void, Integer> task) throws Exception {
-			int resultCode = Constants.ERROR_UNKOWN;
-			resultCode = PlaceTask.getFollowedPlacesFromServer(Activity_Places.this);
-			return resultCode;
+		protected void handleError(Context context, Exception error) {
+			Log.e(Constants.LOG_TAG, "Error happened in " + getClass().getName(), error);
+		}
+
+		@Override
+		protected void after(Context context, Integer taskResult) {
+			if (taskResult == ErrorCode.ERROR_SUCCESS) {
+				((Activity_Main_Places) context).updateFollowedPlacesView();
+			} else {
+				Log.w(Constants.LOG_TAG, getClass().getName() + " failed, nothing need to update!");
+			}
 		}
 	}
 
@@ -221,14 +224,23 @@ public class Activity_Places extends BetterListActivity {
 		public Integer call(BetterAsyncTask<Void, Void, Integer> task) throws Exception {
 			int resultCode = Constants.ERROR_UNKOWN;
 			Location location = ((AsyncGetNearbyPlacesTask) task).getLocation();
-			resultCode = PlaceTask.getNearbyPlacesFromServer(Activity_Places.this, location);
+			resultCode = PlaceTask.getNearbyPlacesFromServer(Activity_Main_Places.this, location);
+			return resultCode;
+		}
+	}
+
+	private class AsyncGetFollowedPlacesCallable implements BetterAsyncTaskCallable<Void, Void, Integer> {
+		@Override
+		public Integer call(BetterAsyncTask<Void, Void, Integer> task) throws Exception {
+			int resultCode = Constants.ERROR_UNKOWN;
+			resultCode = PlaceTask.getFollowedPlacesFromServer(Activity_Main_Places.this);
 			return resultCode;
 		}
 	}
 
 	public void showPlacePosts(int position) {
 		Map<String, Object> place = places.get(position);
-		Intent intent = new Intent(Activity_Places.this, Activity_PlacePosts.class);
+		Intent intent = new Intent(Activity_Main_Places.this, Activity_PlacePosts.class);
 		intent.putExtra(DBConstants.F_PLACEID, (String) place.get(DBConstants.F_PLACEID));
 		intent.putExtra(DBConstants.F_NAME, (String) place.get(DBConstants.F_NAME));
 		intent.putExtra(DBConstants.F_DESC, (String) place.get(DBConstants.F_DESC));
@@ -237,8 +249,8 @@ public class Activity_Places extends BetterListActivity {
 
 	private void lookupViewElements() {
 		tMore = (TextView) findViewById(R.id.more);
-		bPlaceNew = (ImageButton) findViewById(R.id.place_new);
-		bPlaceNearby = (Button) findViewById(R.id.place_around);
-		bPlaceFollowed = (Button) findViewById(R.id.place_followed);
+		bNewPlace = (ImageButton) findViewById(R.id.place_new);
+		bNearbyPlaces = (Button) findViewById(R.id.nearby_places);
+		bFollowedPlaces = (Button) findViewById(R.id.followed_places);
 	}
 }

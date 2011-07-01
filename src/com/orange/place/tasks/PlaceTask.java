@@ -31,16 +31,12 @@ public class PlaceTask {
 		sqlLiteHelper.getNearbyPlaces(list);
 	}
 
-	public static void getPlacePostsFromDB(Context context, List<Map<String, Object>> list, String placeId) {
-		SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
-		sqlLiteHelper.getPlacePosts(list, placeId);
-	}
-
 	public static int getRelatedPostsFromServer(Context context, String postId) {
 		if (postId == null) {
 			Log.e(Constants.LOG_TAG, "The postId is null, no request to server!");
 			return Constants.ERROR_PLACEID_UNKNOWN;
 		}
+		
 		Uri uri = UriHelper.createGetRelatedPostsUri(PrefHelper.getUserId(context), postId);
 		JSONObject json = HttpUtils.httpGet(uri);
 		
@@ -49,23 +45,6 @@ public class PlaceTask {
 			GlobalVarHelper.storeRelatedPosts(JsonHelper.getReturnDataArray(json), postId); // only stores temporarily 
 		}
 		
-		return resultCode;
-	}
-
-	public static int getPlacePostsFromServer(Context context, String placeId) {
-		if (placeId == null) {
-			Log.e(Constants.LOG_TAG, "The placeId is null, no request to server!");
-			return Constants.ERROR_PLACEID_UNKNOWN;
-		}
-		Uri uri = UriHelper.createGetPlacePostsUri(PrefHelper.getUserId(context), placeId);
-		JSONObject json = HttpUtils.httpGet(uri);
-
-		int resultCode = JsonHelper.getResultCode(json);
-		if (resultCode == ErrorCode.ERROR_SUCCESS) {
-			SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context); // improve: not create the helper every time?
-			sqlLiteHelper.storePlacePosts(JsonHelper.getReturnDataArray(json), placeId);
-		}
-
 		return resultCode;
 	}
 	

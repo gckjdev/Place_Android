@@ -72,6 +72,41 @@ public class UriHelper {
 		return uri;
 	}
 	
+	public static Uri createGetNearbyPostsUri(String userId, double longtitude, double latitude) {
+		Builder uriBase = getHttpBaseUriBuilder();
+		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETNEARBYPOSTS);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_LONGTITUDE, String.valueOf(longtitude));
+		uriBase.appendQueryParameter(ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
+		
+		Uri uri = uriBase.build();
+		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
+		return uri;
+	}
+	
+	public static Uri createGetFollowedPostsUri(String userId) {
+		Builder uriBase = getHttpBaseUriBuilder();
+		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETUSERFOLLOWPOSTS);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
+		
+		Uri uri = uriBase.build();
+		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
+		return uri;
+	}
+	
+	public static Uri createGetRepliedPostsUri(String userId) {
+		Builder uriBase = getHttpBaseUriBuilder();
+		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETMYPOSTS);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
+		
+		Uri uri = uriBase.build();
+		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
+		return uri;
+	}
+	
 	public static Uri createGetFollowedPlacesUri(String userId) {
 		Builder uriBase = getHttpBaseUriBuilder();
 		

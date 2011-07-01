@@ -39,6 +39,9 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 			db.execSQL(MappingHelper.SQL_CREATE_FOLLOWED_PLACE);
 			db.execSQL(MappingHelper.SQL_CREATE_NEARBY_PLACE);
 			db.execSQL(MappingHelper.SQL_CREATE_PLACE_POST);
+			db.execSQL(MappingHelper.SQL_TABLE_NEARBY_POST);
+			db.execSQL(MappingHelper.SQL_TABLE_FOLLOWED_POST);
+			db.execSQL(MappingHelper.SQL_TABLE_REPLIED_POST);
 		} catch (SQLException e) {
 			Log.e(Constants.LOG_TAG, "Get SQL exception!", e);
 		}
@@ -94,11 +97,46 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 
 		Log.d(Constants.LOG_TAG, "Start to cleanup and store info for table: " + table);
 		getDatabase().delete(table, null, null);
-		
+
 		ContentValues cv = null;
 		for (int i = 0; i < len; i++) {
 			try {
 				cv = MappingHelper.mapJsonToCV_Place((JSONObject) jsonArr.get(i));
+				getDatabase().insert(table, null, cv);
+			} catch (Exception e) {
+				Log.e(Constants.LOG_TAG, LOG_STORING_DATA_ERROR, e);
+				return Constants.ERROR_SQLITE;
+			}
+		}
+		return ErrorCode.ERROR_SUCCESS;
+	}
+
+	public int storeNearbyPosts(JSONArray jsonArr) {
+		return cleanAndStorePosts(jsonArr, Constants.TABLE_NEARBY_POST);
+	}
+
+	public int storeFollowedPosts(JSONArray jsonArr) {
+		return cleanAndStorePosts(jsonArr, Constants.TABLE_FOLLOWED_POST);
+	}
+
+	public int storeRepliedPosts(JSONArray jsonArr) {
+		return cleanAndStorePosts(jsonArr, Constants.TABLE_REPLIED_POST);
+	}
+
+	private int cleanAndStorePosts(JSONArray jsonArr, String table) {
+		int len = jsonArr.length();
+		if (len <= 0) {
+			Log.w(Constants.LOG_TAG, LOG_ERROR_NO_DATA);
+			return Constants.ERROR_RESP_DATA_EMPTY;
+		}
+
+		Log.d(Constants.LOG_TAG, "Start to cleanup and store info for table: " + table);
+		getDatabase().delete(table, null, null);
+
+		ContentValues cv = null;
+		for (int i = 0; i < len; i++) {
+			try {
+				cv = MappingHelper.mapJsonToCV_Post((JSONObject) jsonArr.get(i));
 				getDatabase().insert(table, null, cv);
 			} catch (Exception e) {
 				Log.e(Constants.LOG_TAG, LOG_STORING_DATA_ERROR, e);
@@ -128,6 +166,29 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		checkAndUpdateList(list, tmpList);
 	}
 
+	public void getNearbyPosts(List<Map<String, Object>> list) {
+		getPosts(list, Constants.TABLE_NEARBY_POST);
+	}
+
+	public void getFollowedPosts(List<Map<String, Object>> list) {
+		getPosts(list, Constants.TABLE_FOLLOWED_POST);
+	}
+
+	public void getRepliedPosts(List<Map<String, Object>> list) {
+		getPosts(list, Constants.TABLE_REPLIED_POST);
+	}
+
+	private void getPosts(List<Map<String, Object>> list, String table) {
+		List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
+		Cursor cur = queryTableAll(table);
+		while (cur.moveToNext()) {
+			tmpList.add(MappingHelper.mapCursorToMap_Post(cur));
+		}
+		cur.close();
+
+		checkAndUpdateList(list, tmpList);
+	}
+
 	public void getFollowedPlaces(List<Map<String, Object>> list) {
 		getPlaces(list, Constants.TABLE_FOLLOWED_PLACE);
 	}
@@ -138,7 +199,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 
 	private void getPlaces(List<Map<String, Object>> list, String table) {
 		List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
-		Cursor cur = queryPlaces(table);
+		Cursor cur = queryTableAll(table);
 		while (cur.moveToNext()) {
 			tmpList.add(MappingHelper.mapCursorToMap_Place(cur));
 		}
@@ -168,7 +229,7 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		return cursor;
 	}
 
-	private Cursor queryPlaces(String table) {
+	private Cursor queryTableAll(String table) {
 		SQLiteQueryBuilder queryBuilder = new SQLiteQueryBuilder();
 		queryBuilder.setTables(table);
 

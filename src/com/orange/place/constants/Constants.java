@@ -15,6 +15,9 @@ public class Constants {
 	public static final String TABLE_NEARBY_PLACE = "Nearby_Place";
 	public static final String TABLE_FOLLOWED_PLACE = "Followed_Place";
 	public static final String TABLE_PLACE_POST = "Place_Post";
+	public static final String TABLE_NEARBY_POST = "Nearby_Post";
+	public static final String TABLE_FOLLOWED_POST = "Followed_Post";
+	public static final String TABLE_REPLIED_POST = "Replied_Post";
 
 	// system
 	public static final int SQLITE_DB_VERSION = 1;

@@ -69,7 +69,7 @@ public class MappingHelper {
 		post.put("UserImage", R.drawable.z_tmp_icon1); // change it !
 		return post;
 	}
-	
+
 	public static ContentValues mapJsonToCV_Post(JSONObject json) {
 		ContentValues cv = new ContentValues();
 		cv.put(DBConstants.F_POSTID, JsonUtil.getStringOrNull(json, ServiceConstant.PARA_POSTID));
@@ -121,7 +121,7 @@ public class MappingHelper {
 		return post;
 	}
 
-	public static final String SQL_CREATE_PLACE_POST = "CREATE TABLE " + Constants.TABLE_PLACE_POST + " (" //
+	public static final String SQL_CREATE_POST = " (" //
 			+ DBConstants.F_POSTID + " TEXT PRIMARY KEY, " //
 			+ DBConstants.F_USERID + " TEXT, " //
 			+ DBConstants.F_PLACEID + " TEXT, " //
@@ -133,7 +133,7 @@ public class MappingHelper {
 			+ DBConstants.F_CONTENT_TYPE + " TEXT, " //
 			+ DBConstants.F_TOTAL_VIEW + " TEXT, " //
 			+ DBConstants.F_TOTAL_FORWARD + " TEXT, " //
-			+ DBConstants.F_TOTAL_QUOTE + " TEXT, " // 
+			+ DBConstants.F_TOTAL_QUOTE + " TEXT, " //
 			+ DBConstants.F_TOTAL_REPLY + " TEXT, " //
 			+ DBConstants.F_CREATE_DATE + " TEXT, " //
 			+ DBConstants.F_SRC_POSTID + " TEXT, " //
@@ -143,6 +143,12 @@ public class MappingHelper {
 			+ DBConstants.F_IMAGE_URL + " TEXT, " //
 			+ DBConstants.F_NAME + " TEXT" // don't have "," for last one !
 			+ ");";
+	public static final String SQL_TABLE_NEARBY_POST = "CREATE TABLE " + Constants.TABLE_NEARBY_POST + SQL_CREATE_POST;
+	public static final String SQL_TABLE_FOLLOWED_POST = "CREATE TABLE " + Constants.TABLE_FOLLOWED_POST
+			+ SQL_CREATE_POST;
+	public static final String SQL_TABLE_REPLIED_POST = "CREATE TABLE " + Constants.TABLE_REPLIED_POST
+			+ SQL_CREATE_POST;
+	public static final String SQL_CREATE_PLACE_POST = "CREATE TABLE " + Constants.TABLE_PLACE_POST + SQL_CREATE_POST;
 
 	private static final String SQL_CREATE_PLACE = " (" //
 			+ DBConstants.F_PLACEID + " TEXT PRIMARY KEY, " //

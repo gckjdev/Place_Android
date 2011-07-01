@@ -11,21 +11,23 @@
 			android:layout_marginTop="8dip" android:layout_marginBottom="8dip"
 			android:orientation="horizontal" android:layout_width="wrap_content"
 			android:layout_height="wrap_content">
-			<Button android:id="@+id/post_around" android:textSize="12sp"
+			<Button android:id="@+id/nearby_posts" android:textSize="12sp"
 				android:textColor="#FFFFFF" android:background="@drawable/title_button_group_left"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="@string/post_around" android:layout_weight="1.0" android:focusableInTouchMode="true" >
-  <requestFocus />
-</Button>
-
-			<Button android:id="@+id/post_followed" android:textSize="12sp"
+				android:text="@string/nearby_posts" android:layout_weight="1.0"
+				android:focusableInTouchMode="true">
+				<requestFocus />
+			</Button>
+			<Button android:id="@+id/followed_posts" android:textSize="12sp"
 				android:textColor="#FFFFFF" android:background="@drawable/title_button_group_middle"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="@string/followed" android:layout_weight="1.0" android:focusableInTouchMode="true" />
-			<Button android:id="@+id/post_replied" android:textSize="12sp"
+				android:text="@string/followed" android:layout_weight="1.0"
+				android:focusableInTouchMode="true" />
+			<Button android:id="@+id/replied_posts" android:textSize="12sp"
 				android:textColor="#FFFFFF" android:background="@drawable/title_button_group_right"
 				android:layout_width="wrap_content" android:layout_height="wrap_content"
-				android:text="@string/post_replied" android:layout_weight="1.0" android:focusableInTouchMode="true" />
+				android:text="@string/replied_posts" android:layout_weight="1.0"
+				android:focusableInTouchMode="true" />
 		</LinearLayout>
 		<LinearLayout android:gravity="right|center_vertical"
 			android:layout_alignParentRight="true" android:layout_marginRight="12dip"
