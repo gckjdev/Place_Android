@@ -24,8 +24,8 @@
 	
 	<string name="create_new_place">创建新地盘</string>
 	<string name="create_new_post">创建新帖子</string>
-	<string name="create_place_success">新地盘创建成功！</string>
-	<string name="create_post_success">新帖子发表成功！</string>
+	<string name="create_place_success">地盘创建成功！</string>
+	<string name="create_post_success">帖子发表成功！</string>
 	<string name="place_name">地盘名称...</string>
 	<string name="place_desc">地盘描述...</string>
 	<string name="post_content">帖子内容...</string>

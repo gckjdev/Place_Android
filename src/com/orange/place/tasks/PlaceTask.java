@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
-import android.text.Editable;
 import android.util.Log;
 
 import com.orange.place.constant.ErrorCode;
@@ -94,7 +93,7 @@ public class PlaceTask {
 
 		int resultCode = JsonHelper.getResultCode(json);
 		if (resultCode == ErrorCode.ERROR_SUCCESS) {
-			// TODO, what todo?
+			//TODO: anything need to do?
 		}
 
 		return resultCode;

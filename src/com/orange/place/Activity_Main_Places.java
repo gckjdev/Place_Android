@@ -67,6 +67,12 @@ public class Activity_Main_Places extends BetterListActivity {
 		setNewPlaceListener();
 	}
 
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		refreshView();
+	}
+	
 	private void showNearbyPlaces() {
 		Log.d(Constants.LOG_TAG, "Start to show Nearby place");
 		bNearbyPlaces.requestFocus();
@@ -133,13 +139,17 @@ public class Activity_Main_Places extends BetterListActivity {
 		tMore.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (VIEW_NEARBY.equals(currentView)) {
-					asyncGetNearbyPlaces();
-				} else if (VIEW_FOLLOWED.equals(currentView)) {
-					asyncGetFollowedPlaces();
-				}
+				refreshView();
 			}
 		});
+	}
+
+	private void refreshView() {
+		if (VIEW_NEARBY.equals(currentView)) {
+			asyncGetNearbyPlaces();
+		} else if (VIEW_FOLLOWED.equals(currentView)) {
+			asyncGetFollowedPlaces();
+		}
 	}
 
 	private void asyncGetFollowedPlaces() {

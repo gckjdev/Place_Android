@@ -32,6 +32,7 @@ public class Activity_PlacePosts extends BetterListActivity {
 	private List<Map<String, Object>> placePosts = new ArrayList<Map<String, Object>>();
 	private SimpleAdapter placePostsAdapter;
 	private Button bGoBack;
+	private Button bFollow;
 	private ImageButton bNewPost;
 	private TextView tRefresh;
 	private TextView tPlaceName;
@@ -67,10 +68,17 @@ public class Activity_PlacePosts extends BetterListActivity {
 		setRefreshListener();
 		setListItemListener();
 		setGoBackListener();
-		setNewPlaceListener();
+		setFollowListener();
+		setNewPostListener();
 	}
 
-	private void setNewPlaceListener() {
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		asyncGetPlacePosts();
+	}
+
+	private void setNewPostListener() {
 		bNewPost.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -81,11 +89,20 @@ public class Activity_PlacePosts extends BetterListActivity {
 		});
 	}
 
+	private void setFollowListener() {
+		bFollow.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				ToastUtil.makeNotImplToast(Activity_PlacePosts.this);
+			}
+		});
+	}
+
 	private void setGoBackListener() {
 		bGoBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtil.makeNotImplToast(Activity_PlacePosts.this);
+				Activity_PlacePosts.this.finish();
 			}
 		});
 	}
@@ -175,6 +192,7 @@ public class Activity_PlacePosts extends BetterListActivity {
 
 	private void lookupAndSetViewElements() {
 		bGoBack = (Button) findViewById(R.id.go_back);
+		bFollow = (Button) findViewById(R.id.follow);
 		bNewPost = (ImageButton) findViewById(R.id.post_new);
 		tRefresh = (TextView) findViewById(R.id.refresh);
 		tPlaceName = (TextView) findViewById(R.id.place_name);

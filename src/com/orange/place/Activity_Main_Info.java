@@ -68,6 +68,12 @@ public class Activity_Main_Info extends BetterListActivity {
 		setNewPostListener();
 	}
 
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		refreshView();
+	}
+
 	private void showNearbyPosts() {
 		Log.d(Constants.LOG_TAG, "Start to show Nearby posts");
 		bNearbyPosts.requestFocus();
@@ -99,15 +105,19 @@ public class Activity_Main_Info extends BetterListActivity {
 		tMore.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (VIEW_NEARBY.equals(currentView)) {
-					asyncGetNearbyPosts();
-				} else if (VIEW_FOLLOWED.equals(currentView)) {
-					asyncGetFollowedPosts();
-				} else if (VIEW_REPLIED.equals(currentView)) {
-					asyncGetRepliedPosts();
-				}
+				refreshView();
 			}
 		});
+	}
+	
+	private void refreshView() {
+		if (VIEW_NEARBY.equals(currentView)) {
+			asyncGetNearbyPosts();
+		} else if (VIEW_FOLLOWED.equals(currentView)) {
+			asyncGetFollowedPosts();
+		} else if (VIEW_REPLIED.equals(currentView)) {
+			asyncGetRepliedPosts();
+		}
 	}
 
 	private void setNewPostListener() {

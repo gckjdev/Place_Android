@@ -83,7 +83,7 @@ public class Activity_PostDetail extends BetterListActivity {
 		bGoBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtil.makeNotImplToast(Activity_PostDetail.this);
+				Activity_PostDetail.this.finish();
 			}
 		});
 	}
