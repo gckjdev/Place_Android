@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -27,7 +26,6 @@ import com.orange.place.helper.GlobalVarHelper;
 import com.orange.place.helper.PrefHelper;
 import com.orange.place.tasks.PlaceTask;
 import com.orange.utils.ActivityUtil;
-import com.orange.utils.ToastUtil;
 
 //public class Activity_Place extends BetterListActivity { // we might need this for async 
 public class Activity_PostDetail extends BetterListActivity {
@@ -35,13 +33,16 @@ public class Activity_PostDetail extends BetterListActivity {
 	private List<Map<String, Object>> relatedPosts = new ArrayList<Map<String, Object>>();
 	private SimpleAdapter relatedPostAdapter;
 	private Button bGoBack;
+	private Button bReply;
 	private TextView tRefresh;
 	private TextView tPostContent;
 	private TextView tPostTime;
 	private TextView tPostRelated;
 	private TextView tUserId;
 	private ImageView iUserImage;
+	private String placeId;
 	private String postId;
+	private String srcPostId;
 	private String postContent;
 	private String postTime;
 	private String postRelatedAmount;
@@ -53,6 +54,8 @@ public class Activity_PostDetail extends BetterListActivity {
 		super.onCreate(savedInstanceState);
 
 		postId = getIntent().getStringExtra(DBConstants.F_POSTID);
+		placeId = getIntent().getStringExtra(DBConstants.F_PLACEID);
+		srcPostId = getIntent().getStringExtra(DBConstants.F_SRC_POSTID);
 		postContent = getIntent().getStringExtra(DBConstants.F_TEXT_CONTENT);
 		postRelatedAmount = getIntent().getStringExtra(DBConstants.C_TOTAL_RELATED);
 		postTime = getIntent().getStringExtra(DBConstants.F_CREATE_DATE);
@@ -77,6 +80,13 @@ public class Activity_PostDetail extends BetterListActivity {
 		setRefreshListener();
 		setListItemListener();
 		setGoBackListener();
+		setReplyListener();
+	}
+
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		asyncGetRelatedPosts();
 	}
 
 	private void setGoBackListener() {
@@ -88,11 +98,24 @@ public class Activity_PostDetail extends BetterListActivity {
 		});
 	}
 
+	private void setReplyListener() {
+		bReply.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(Activity_PostDetail.this, Activity_CreatePost.class);
+				intent.putExtra(DBConstants.F_PLACEID, placeId);
+				intent.putExtra(DBConstants.F_SRC_POSTID, srcPostId);
+				intent.putExtra(DBConstants.F_REPLY_POSTID, postId);
+				startActivity(intent);
+			}
+		});
+	}
+
 	private void setListItemListener() {
 		ListView listView = getListView();
 		listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-				showPostsDetail(position);
+				// do nothing, as already in the post detail
 			}
 		});
 	}
@@ -165,20 +188,11 @@ public class Activity_PostDetail extends BetterListActivity {
 			return resultCode;
 		}
 	}
-
-	public void showPostsDetail(int position) {
-		Map<String, Object> place = relatedPosts.get(position);
-		new AlertDialog.Builder(this).setTitle("Self defined ListVeiw")
-				.setMessage("you clicked the place post:" + place.get(DBConstants.F_POSTID))
-				.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int whButton) {
-					}
-				}).show();
-	}
-
+	
 	private void lookupAndSetViewElements() {
 		bGoBack = (Button) findViewById(R.id.go_back);
 		tRefresh = (TextView) findViewById(R.id.refresh);
+		bReply = (Button) findViewById(R.id.reply);
 		// R.id.user_image, R.id.post_content, R.id.user_id, R.id.post_time,R.id.post_related
 		tPostContent = (TextView) findViewById(R.id.post_content);
 		tPostContent.setText(postContent);

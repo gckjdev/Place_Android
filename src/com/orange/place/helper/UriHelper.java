@@ -134,7 +134,7 @@ public class UriHelper {
 		return uri;
 	}
 
-	public static Uri createNewPostUri(String userId, String placeId, String postContent, double longitude,
+	public static Uri createPostUri(String userId, String placeId, String postContent, double longitude,
 			double latitude, int contentType, String syncSns, String srcPostId, String replyPostId) {
 		Builder uriBase = getHttpBaseUriBuilder();
 
@@ -157,7 +157,7 @@ public class UriHelper {
 		return uri;
 	}
 
-	public static Uri createNewPlacesUri(String userId, String placeName, String placeDesc, double longitude,
+	public static Uri createPlaceUri(String userId, String placeName, String placeDesc, double longitude,
 			double latitude, double radius, String postType) {
 		Builder uriBase = getHttpBaseUriBuilder();
 

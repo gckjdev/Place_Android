@@ -30,7 +30,7 @@ public class PlaceTask {
 		SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
 		sqlLiteHelper.getNearbyPlaces(list);
 	}
-
+	
 	public static int getRelatedPostsFromServer(Context context, String postId) {
 		if (postId == null) {
 			Log.e(Constants.LOG_TAG, "The postId is null, no request to server!");
@@ -87,13 +87,13 @@ public class PlaceTask {
 			return Constants.ERROR_LOCATION_UNKNOWN;
 		}
 
-		Uri uri = UriHelper.createNewPlacesUri(PrefHelper.getUserId(context), name, desc, location.getLongitude(),
+		Uri uri = UriHelper.createPlaceUri(PrefHelper.getUserId(context), name, desc, location.getLongitude(),
 				location.getLatitude(), radius, postType);
 		JSONObject json = HttpUtils.httpGet(uri);
 
 		int resultCode = JsonHelper.getResultCode(json);
 		if (resultCode == ErrorCode.ERROR_SUCCESS) {
-			//TODO: anything need to do?
+			// TODO: anything need to do?
 		}
 
 		return resultCode;

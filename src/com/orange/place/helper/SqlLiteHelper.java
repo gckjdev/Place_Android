@@ -36,12 +36,12 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 	public void onCreate(SQLiteDatabase db) {
 		Log.v(Constants.LOG_TAG, "Creating database");
 		try {
-			db.execSQL(MappingHelper.SQL_CREATE_FOLLOWED_PLACE);
-			db.execSQL(MappingHelper.SQL_CREATE_NEARBY_PLACE);
-			db.execSQL(MappingHelper.SQL_CREATE_PLACE_POST);
-			db.execSQL(MappingHelper.SQL_TABLE_NEARBY_POST);
-			db.execSQL(MappingHelper.SQL_TABLE_FOLLOWED_POST);
-			db.execSQL(MappingHelper.SQL_TABLE_REPLIED_POST);
+			db.execSQL(SqlConstants.SQL_CREATE_FOLLOWED_PLACE);
+			db.execSQL(SqlConstants.SQL_CREATE_NEARBY_PLACE);
+			db.execSQL(SqlConstants.SQL_CREATE_PLACE_POST);
+			db.execSQL(SqlConstants.SQL_TABLE_NEARBY_POST);
+			db.execSQL(SqlConstants.SQL_TABLE_FOLLOWED_POST);
+			db.execSQL(SqlConstants.SQL_TABLE_REPLIED_POST);
 		} catch (SQLException e) {
 			Log.e(Constants.LOG_TAG, "Get SQL exception!", e);
 		}
