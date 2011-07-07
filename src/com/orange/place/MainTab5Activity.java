@@ -132,8 +132,6 @@ public class MainTab5Activity extends Activity {
 		if (bundle != null){
 			String pin = (String) bundle.get("PIN");
 			if (pin != null){
-//				sinaRequest.setOauthToken("b4f19f9a5aa03c1aa094ac529218a974");
-//				sinaRequest.setOauthTokenSecret("a5363f26b7f89f9555573643aaa68f27");
 				snsService.getAccessToken(sinaRequest, pin);
 			}
 		}
