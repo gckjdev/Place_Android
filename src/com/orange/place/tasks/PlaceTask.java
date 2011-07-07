@@ -20,6 +20,30 @@ import com.orange.place.helper.UriHelper;
 import com.orange.utils.HttpUtils;
 
 public class PlaceTask {
+	
+	public static int followPlace(Context context, String placeId){
+		Uri uri = UriHelper.createFollowPlaceUri(PrefHelper.getUserId(context), placeId);
+		JSONObject json = HttpUtils.httpGet(uri);
+
+		int resultCode = JsonHelper.getResultCode(json);
+		if (resultCode == ErrorCode.ERROR_SUCCESS) {
+			//TODO
+		}
+
+		return resultCode;
+	}
+
+	public static int unfollowPlace(Context context, String placeId){
+		Uri uri = UriHelper.createUnfollowPlaceUri(PrefHelper.getUserId(context), placeId);
+		JSONObject json = HttpUtils.httpGet(uri);
+		
+		int resultCode = JsonHelper.getResultCode(json);
+		if (resultCode == ErrorCode.ERROR_SUCCESS) {
+			//TODO
+		}
+		
+		return resultCode;
+	}
 
 	public static void getFollowedPlacesFromDB(Context context, List<Map<String, Object>> list) {
 		SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
@@ -34,7 +58,7 @@ public class PlaceTask {
 	public static int getRelatedPostsFromServer(Context context, String postId) {
 		if (postId == null) {
 			Log.e(Constants.LOG_TAG, "The postId is null, no request to server!");
-			return Constants.ERROR_PLACEID_UNKNOWN;
+			return Constants.ERROR_POSTID_UNKNOWN;
 		}
 
 		Uri uri = UriHelper.createGetRelatedPostsUri(PrefHelper.getUserId(context), postId);

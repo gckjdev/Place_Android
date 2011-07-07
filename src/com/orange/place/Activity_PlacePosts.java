@@ -96,7 +96,11 @@ public class Activity_PlacePosts extends BetterListActivity {
 		bFollow.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtil.makeNotImplToast(Activity_PlacePosts.this);
+				if (userFollowedPlace) {
+					PlaceTask.unfollowPlace(Activity_PlacePosts.this, placeId);
+				} else {
+					PlaceTask.followPlace(Activity_PlacePosts.this, placeId);
+				}
 			}
 		});
 	}

@@ -36,7 +36,8 @@ public class Constants {
 	public static final int ERROR_RESP_DATA_EMPTY = 70004;
 	public static final int ERROR_LOCATION_UNKNOWN = 70005;
 	public static final int ERROR_PLACEID_UNKNOWN = 70006;
-	public static final int ERROR_SQLITE = 70006;
+	public static final int ERROR_POSTID_UNKNOWN = 70007;
+	public static final int ERROR_SQLITE = 70008;
 
 	// list view mapping
 	public static String[] postsViewFrom = new String[] { "UserImage", DBConstants.F_TEXT_CONTENT,

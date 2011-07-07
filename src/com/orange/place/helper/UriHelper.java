@@ -61,6 +61,30 @@ public class UriHelper {
 		return uri;
 	}
 
+	public static Uri createUnfollowPlaceUri(String userId, String placeId) {
+		Builder uriBase = getHttpBaseUriBuilder();
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_USERFOLLOWPLACE);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_PLACEID, placeId);
+		
+		Uri uri = uriBase.build();
+		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
+		return uri;
+	}
+
+	public static Uri createFollowPlaceUri(String userId, String placeId) {
+		Builder uriBase = getHttpBaseUriBuilder();
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_USERUNFOLLOWPLACE);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_PLACEID, placeId);
+		
+		Uri uri = uriBase.build();
+		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
+		return uri;
+	}
+	
 	public static Uri createGetPlacePostsUri(String userId, String placeId) {
 		Builder uriBase = getHttpBaseUriBuilder();
 		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_GETPLACEPOST);

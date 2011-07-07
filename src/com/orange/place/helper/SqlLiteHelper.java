@@ -80,6 +80,14 @@ public class SqlLiteHelper extends SQLiteOpenHelper {
 		return ErrorCode.ERROR_SUCCESS;
 	}
 
+//	public int removeFollowedPlace(String placeId){
+//		
+//	}
+//	
+//	public int addFollowedPlace(String placeId){
+//		
+//	}
+	
 	public int storeFollowedPlaces(JSONArray jsonArr) {
 		return cleanAndStorePlaces(jsonArr, Constants.TABLE_FOLLOWED_PLACE);
 	}
