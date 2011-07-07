@@ -14,9 +14,11 @@ import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.droidfu.activities.BetterListActivity;
 import com.orange.place.constant.DBConstants;
+import com.orange.place.constant.ErrorCode;
 import com.orange.place.constants.Constants;
 import com.orange.place.tasks.PlaceTask;
 import com.orange.place.tasks.PostTask;
@@ -64,9 +66,9 @@ public class Activity_PlacePosts extends BetterListActivity {
 				Constants.postsViewTo);
 		setListAdapter(placePostsAdapter);
 
-		asyncGetPlacePosts();
 		updateFollowButton(); // first try use the DB
 		asyncGetFollowedPlaces(); // then use latest info
+		asyncGetPlacePosts();
 
 		setRefreshListener();
 		setListItemListener();
@@ -96,10 +98,17 @@ public class Activity_PlacePosts extends BetterListActivity {
 		bFollow.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				int resultCode = Constants.ERROR_UNKOWN;
 				if (userFollowedPlace) {
-					PlaceTask.unfollowPlace(Activity_PlacePosts.this, placeId);
+					resultCode = PlaceTask.unfollowPlace(Activity_PlacePosts.this, placeId);
 				} else {
-					PlaceTask.followPlace(Activity_PlacePosts.this, placeId);
+					resultCode = PlaceTask.followPlace(Activity_PlacePosts.this, placeId);
+				}
+
+				if (resultCode == ErrorCode.ERROR_SUCCESS) {
+					asyncGetFollowedPlaces(); // this will trigger updateFollowButton()
+				} else {
+					Toast.makeText(Activity_PlacePosts.this, getString(R.string.op_fail_pls_retry), Toast.LENGTH_LONG).show();
 				}
 			}
 		});

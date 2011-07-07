@@ -43,6 +43,7 @@
 	<string name="followed">我的关注 </string>
 	<string name="nearby_posts">周边热帖 </string>
 	<string name="replied_posts">回复我的 </string>
+	<string name="op_fail_pls_retry">操作失败，请稍后重试 </string>
 	
 	<!-- remove following stubs -->
 	<string name="todo">//TODO</string>

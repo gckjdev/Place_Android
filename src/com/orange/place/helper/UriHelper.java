@@ -63,7 +63,7 @@ public class UriHelper {
 
 	public static Uri createUnfollowPlaceUri(String userId, String placeId) {
 		Builder uriBase = getHttpBaseUriBuilder();
-		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_USERFOLLOWPLACE);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_USERUNFOLLOWPLACE);
 		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
 		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
 		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_PLACEID, placeId);
@@ -75,7 +75,7 @@ public class UriHelper {
 
 	public static Uri createFollowPlaceUri(String userId, String placeId) {
 		Builder uriBase = getHttpBaseUriBuilder();
-		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_USERUNFOLLOWPLACE);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_USERFOLLOWPLACE);
 		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
 		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
 		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_PLACEID, placeId);

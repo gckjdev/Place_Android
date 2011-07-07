@@ -26,10 +26,6 @@ public class PlaceTask {
 		JSONObject json = HttpUtils.httpGet(uri);
 
 		int resultCode = JsonHelper.getResultCode(json);
-		if (resultCode == ErrorCode.ERROR_SUCCESS) {
-			//TODO
-		}
-
 		return resultCode;
 	}
 
@@ -38,10 +34,6 @@ public class PlaceTask {
 		JSONObject json = HttpUtils.httpGet(uri);
 		
 		int resultCode = JsonHelper.getResultCode(json);
-		if (resultCode == ErrorCode.ERROR_SUCCESS) {
-			//TODO
-		}
-		
 		return resultCode;
 	}
 
