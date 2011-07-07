@@ -102,14 +102,14 @@ public class PostTask {
 		return resultCode;
 	}
 
-	public static int newPost(Context context, String placeId, String postContent, Location location,
+	public static int createPost(Context context, String placeId, String postContent, Location location,
 			int contentType, String syncSns, String srcPostId, String replyPostId) {
 		if (location == null || postContent == null || "".equals(postContent.trim())) {
 			Log.e(Constants.LOG_TAG, "The location/postContent null or empty, no request to server!");
 			return Constants.ERROR_LOCATION_UNKNOWN;
 		}
 
-		Uri uri = UriHelper.createNewPostUri(PrefHelper.getUserId(context), placeId, postContent,
+		Uri uri = UriHelper.createPostUri(PrefHelper.getUserId(context), placeId, postContent,
 				location.getLongitude(), location.getLatitude(), contentType, syncSns, srcPostId, replyPostId);
 		JSONObject json = HttpUtils.httpGet(uri);
 

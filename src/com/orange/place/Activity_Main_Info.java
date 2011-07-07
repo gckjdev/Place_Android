@@ -68,6 +68,12 @@ public class Activity_Main_Info extends BetterListActivity {
 		setNewPostListener();
 	}
 
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		refreshView();
+	}
+
 	private void showNearbyPosts() {
 		Log.d(Constants.LOG_TAG, "Start to show Nearby posts");
 		bNearbyPosts.requestFocus();
@@ -99,15 +105,19 @@ public class Activity_Main_Info extends BetterListActivity {
 		tMore.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (VIEW_NEARBY.equals(currentView)) {
-					asyncGetNearbyPosts();
-				} else if (VIEW_FOLLOWED.equals(currentView)) {
-					asyncGetFollowedPosts();
-				} else if (VIEW_REPLIED.equals(currentView)) {
-					asyncGetRepliedPosts();
-				}
+				refreshView();
 			}
 		});
+	}
+	
+	private void refreshView() {
+		if (VIEW_NEARBY.equals(currentView)) {
+			asyncGetNearbyPosts();
+		} else if (VIEW_FOLLOWED.equals(currentView)) {
+			asyncGetFollowedPosts();
+		} else if (VIEW_REPLIED.equals(currentView)) {
+			asyncGetRepliedPosts();
+		}
 	}
 
 	private void setNewPostListener() {
@@ -132,6 +142,8 @@ public class Activity_Main_Info extends BetterListActivity {
 		Map<String, Object> post = posts.get(position);
 		Intent intent = new Intent(Activity_Main_Info.this, Activity_PostDetail.class);
 		intent.putExtra(DBConstants.F_POSTID, (String) post.get(DBConstants.F_POSTID));
+		intent.putExtra(DBConstants.F_PLACEID, (String) post.get(DBConstants.F_PLACEID));
+		intent.putExtra(DBConstants.F_SRC_POSTID, (String) post.get(DBConstants.F_SRC_POSTID));
 		intent.putExtra(DBConstants.F_TEXT_CONTENT, (String) post.get(DBConstants.F_TEXT_CONTENT));
 		intent.putExtra(DBConstants.C_TOTAL_RELATED, (String) post.get(DBConstants.C_TOTAL_RELATED));
 		intent.putExtra(DBConstants.F_CREATE_DATE, (String) post.get(DBConstants.F_CREATE_DATE));

@@ -14,12 +14,14 @@ import com.orange.place.tasks.PostTask;
 import com.orange.utils.ActivityUtil;
 import com.orange.utils.LocationUtil;
 
-public class Activity_NewPost extends Activity {
+public class Activity_CreatePost extends Activity {
 
 	private Button bPost;
 	private EditText ePostContent;
 	private TextView tErrorInfo;
 	private String placeId;
+	private String replyPostId;
+	private String srcPostId;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -28,6 +30,8 @@ public class Activity_NewPost extends Activity {
 		ActivityUtil.setFullScreen(this);
 
 		placeId = getIntent().getStringExtra(DBConstants.F_PLACEID);
+		replyPostId = getIntent().getStringExtra(DBConstants.F_REPLY_POSTID);
+		srcPostId = getIntent().getStringExtra(DBConstants.F_SRC_POSTID);
 
 		setContentView(R.layout.activity_new_post);
 		lookupViewElements();
@@ -38,13 +42,13 @@ public class Activity_NewPost extends Activity {
 		bPost.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				int resultCode = PostTask.newPost(Activity_NewPost.this, placeId, ePostContent.getText().toString(),
-						LocationUtil.getCurrentLocation(Activity_NewPost.this), DBConstants.CONTENT_TYPE_TEXT, null,
-						null, null);
+				int resultCode = PostTask.createPost(Activity_CreatePost.this, placeId, ePostContent.getText().toString(),
+						LocationUtil.getCurrentLocation(Activity_CreatePost.this), DBConstants.CONTENT_TYPE_TEXT, null,
+						srcPostId, replyPostId);
 				if (resultCode == ErrorCode.ERROR_SUCCESS) {
-					Toast.makeText(Activity_NewPost.this, getString(R.string.create_post_success), Toast.LENGTH_LONG)
+					Toast.makeText(Activity_CreatePost.this, getString(R.string.create_post_success), Toast.LENGTH_LONG)
 							.show();
-					Activity_NewPost.this.finish();
+					Activity_CreatePost.this.finish();
 				} else {
 					tErrorInfo.setText("Create post failed, errorCode=" + resultCode);
 				}

@@ -8,7 +8,6 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.location.Location;
 import android.net.Uri;
-import android.text.Editable;
 import android.util.Log;
 
 import com.orange.place.constant.ErrorCode;
@@ -21,6 +20,30 @@ import com.orange.place.helper.UriHelper;
 import com.orange.utils.HttpUtils;
 
 public class PlaceTask {
+	
+	public static int followPlace(Context context, String placeId){
+		Uri uri = UriHelper.createFollowPlaceUri(PrefHelper.getUserId(context), placeId);
+		JSONObject json = HttpUtils.httpGet(uri);
+
+		int resultCode = JsonHelper.getResultCode(json);
+		if (resultCode == ErrorCode.ERROR_SUCCESS) {
+			//TODO
+		}
+
+		return resultCode;
+	}
+
+	public static int unfollowPlace(Context context, String placeId){
+		Uri uri = UriHelper.createUnfollowPlaceUri(PrefHelper.getUserId(context), placeId);
+		JSONObject json = HttpUtils.httpGet(uri);
+		
+		int resultCode = JsonHelper.getResultCode(json);
+		if (resultCode == ErrorCode.ERROR_SUCCESS) {
+			//TODO
+		}
+		
+		return resultCode;
+	}
 
 	public static void getFollowedPlacesFromDB(Context context, List<Map<String, Object>> list) {
 		SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
@@ -31,11 +54,11 @@ public class PlaceTask {
 		SqlLiteHelper sqlLiteHelper = new SqlLiteHelper(context);
 		sqlLiteHelper.getNearbyPlaces(list);
 	}
-
+	
 	public static int getRelatedPostsFromServer(Context context, String postId) {
 		if (postId == null) {
 			Log.e(Constants.LOG_TAG, "The postId is null, no request to server!");
-			return Constants.ERROR_PLACEID_UNKNOWN;
+			return Constants.ERROR_POSTID_UNKNOWN;
 		}
 
 		Uri uri = UriHelper.createGetRelatedPostsUri(PrefHelper.getUserId(context), postId);
@@ -88,13 +111,13 @@ public class PlaceTask {
 			return Constants.ERROR_LOCATION_UNKNOWN;
 		}
 
-		Uri uri = UriHelper.createNewPlacesUri(PrefHelper.getUserId(context), name, desc, location.getLongitude(),
+		Uri uri = UriHelper.createPlaceUri(PrefHelper.getUserId(context), name, desc, location.getLongitude(),
 				location.getLatitude(), radius, postType);
 		JSONObject json = HttpUtils.httpGet(uri);
 
 		int resultCode = JsonHelper.getResultCode(json);
 		if (resultCode == ErrorCode.ERROR_SUCCESS) {
-			// TODO, what todo?
+			// TODO: anything need to do?
 		}
 
 		return resultCode;

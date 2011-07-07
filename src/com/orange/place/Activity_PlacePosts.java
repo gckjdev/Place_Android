@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,12 +16,14 @@ import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.github.droidfu.activities.BetterListActivity;
-import com.github.droidfu.concurrent.BetterAsyncTask;
-import com.github.droidfu.concurrent.BetterAsyncTaskCallable;
 import com.orange.place.constant.DBConstants;
-import com.orange.place.constant.ErrorCode;
 import com.orange.place.constants.Constants;
+import com.orange.place.tasks.PlaceTask;
 import com.orange.place.tasks.PostTask;
+import com.orange.place.tasks.async.AsyncGetFollowedPlacesCallable;
+import com.orange.place.tasks.async.AsyncGetFollowedPlacesTask;
+import com.orange.place.tasks.async.AsyncGetPlacePostsCallable;
+import com.orange.place.tasks.async.AsyncGetPlacePostsTask;
 import com.orange.utils.ActivityUtil;
 import com.orange.utils.ToastUtil;
 
@@ -32,13 +33,15 @@ public class Activity_PlacePosts extends BetterListActivity {
 	private List<Map<String, Object>> placePosts = new ArrayList<Map<String, Object>>();
 	private SimpleAdapter placePostsAdapter;
 	private Button bGoBack;
-	private ImageButton bNewPost;
+	private Button bFollow;
+	private ImageButton bCreatePost;
 	private TextView tRefresh;
 	private TextView tPlaceName;
 	private TextView tPlaceDesc;
 	private String placeId;
 	private String placeName;
 	private String placeDesc;
+	private boolean userFollowedPlace;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -61,22 +64,43 @@ public class Activity_PlacePosts extends BetterListActivity {
 				Constants.postsViewTo);
 		setListAdapter(placePostsAdapter);
 
-		// then get newest posts async
 		asyncGetPlacePosts();
+		updateFollowButton(); // first try use the DB
+		asyncGetFollowedPlaces(); // then use latest info
 
 		setRefreshListener();
 		setListItemListener();
 		setGoBackListener();
-		setNewPlaceListener();
+		setFollowListener();
+		setCreatePostListener();
 	}
 
-	private void setNewPlaceListener() {
-		bNewPost.setOnClickListener(new View.OnClickListener() {
+	@Override
+	public void onRestart() {
+		super.onRestart();
+		asyncGetPlacePosts();
+	}
+
+	private void setCreatePostListener() {
+		bCreatePost.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(Activity_PlacePosts.this, Activity_NewPost.class);
-				intent.putExtra(DBConstants.F_PLACEID, placeId);
+				Intent intent = new Intent(Activity_PlacePosts.this, Activity_CreatePost.class);
+				intent.putExtra(DBConstants.F_PLACEID, placeId); // no srcPostId and replySrcId, as this is new post
 				startActivity(intent);
+			}
+		});
+	}
+
+	private void setFollowListener() {
+		bFollow.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (userFollowedPlace) {
+					PlaceTask.unfollowPlace(Activity_PlacePosts.this, placeId);
+				} else {
+					PlaceTask.followPlace(Activity_PlacePosts.this, placeId);
+				}
 			}
 		});
 	}
@@ -85,7 +109,7 @@ public class Activity_PlacePosts extends BetterListActivity {
 		bGoBack.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				ToastUtil.makeNotImplToast(Activity_PlacePosts.this);
+				Activity_PlacePosts.this.finish();
 			}
 		});
 	}
@@ -108,64 +132,57 @@ public class Activity_PlacePosts extends BetterListActivity {
 		});
 	}
 
+	public void updateFollowButton() {
+		checkUserFollowedPlace();
+		if (userFollowedPlace) {
+			bFollow.setText(getString(R.string.unfollow));
+			bFollow.setVisibility(View.VISIBLE);
+		} else {
+			bFollow.setText(getString(R.string.follow));
+			bFollow.setVisibility(View.VISIBLE);
+		}
+	}
+
+	private void checkUserFollowedPlace() {
+		List<Map<String, Object>> places = new ArrayList<Map<String, Object>>();
+		PlaceTask.getFollowedPlacesFromDB(this, places);
+
+		for (Map<String, Object> place : places) {
+			if (placeId.equals(place.get(DBConstants.F_PLACEID))) {
+				userFollowedPlace = true;
+				return;
+			}
+		}
+		userFollowedPlace = false;
+	}
+
+	private void asyncGetFollowedPlaces() {
+		AsyncGetFollowedPlacesTask getFollowedPlacesTask = new AsyncGetFollowedPlacesTask(this);
+		getFollowedPlacesTask.setCallable(new AsyncGetFollowedPlacesCallable(this));
+		getFollowedPlacesTask.disableDialog();
+		getFollowedPlacesTask.execute();
+	}
+
 	private void asyncGetPlacePosts() {
 		AsyncGetPlacePostsTask getPlacePostsTask = new AsyncGetPlacePostsTask(this);
-		getPlacePostsTask.setCallable(new AsyncGetPlacePostsCallable());
+		getPlacePostsTask.setCallable(new AsyncGetPlacePostsCallable(this));
 		getPlacePostsTask.disableDialog();
 		getPlacePostsTask.setPlaceId(placeId);
 		getPlacePostsTask.execute();
 	}
 
-	private void updatePlacePostsView() {
+	public void updatePlacePostsView() {
 		PostTask.getPlacePostsFromDB(this, placePosts, placeId);
 		Log.d(Constants.LOG_TAG, "Updating place post list view with: " + placePosts);
 		placePostsAdapter.notifyDataSetChanged();
-	}
-
-	private class AsyncGetPlacePostsTask extends BetterAsyncTask<Void, Void, Integer> {
-		private String placeId;
-
-		public AsyncGetPlacePostsTask(Context context) {
-			super(context);
-		}
-
-		@Override
-		protected void handleError(Context context, Exception error) {
-			Log.e(Constants.LOG_TAG, "Error happened in " + getClass().getName(), error);
-		}
-
-		@Override
-		protected void after(Context context, Integer taskResult) {
-			if (taskResult == ErrorCode.ERROR_SUCCESS) {
-				((Activity_PlacePosts) context).updatePlacePostsView();
-			} else {
-				Log.w(Constants.LOG_TAG, getClass().getName() + " failed, nothing need to update!");
-			}
-		}
-
-		public String getPlaceId() {
-			return placeId;
-		}
-
-		public void setPlaceId(String placeId) {
-			this.placeId = placeId;
-		}
-	}
-
-	private class AsyncGetPlacePostsCallable implements BetterAsyncTaskCallable<Void, Void, Integer> {
-		@Override
-		public Integer call(BetterAsyncTask<Void, Void, Integer> task) throws Exception {
-			int resultCode = Constants.ERROR_UNKOWN;
-			String placeId = ((AsyncGetPlacePostsTask) task).getPlaceId();
-			resultCode = PostTask.getPlacePostsFromServer(Activity_PlacePosts.this, placeId);
-			return resultCode;
-		}
 	}
 
 	public void showPostDetail(int position) {
 		Map<String, Object> post = placePosts.get(position);
 		Intent intent = new Intent(Activity_PlacePosts.this, Activity_PostDetail.class);
 		intent.putExtra(DBConstants.F_POSTID, (String) post.get(DBConstants.F_POSTID));
+		intent.putExtra(DBConstants.F_PLACEID, (String) post.get(DBConstants.F_PLACEID));
+		intent.putExtra(DBConstants.F_SRC_POSTID, (String) post.get(DBConstants.F_SRC_POSTID));
 		intent.putExtra(DBConstants.F_TEXT_CONTENT, (String) post.get(DBConstants.F_TEXT_CONTENT));
 		intent.putExtra(DBConstants.C_TOTAL_RELATED, (String) post.get(DBConstants.C_TOTAL_RELATED));
 		intent.putExtra(DBConstants.F_CREATE_DATE, (String) post.get(DBConstants.F_CREATE_DATE));
@@ -175,11 +192,13 @@ public class Activity_PlacePosts extends BetterListActivity {
 
 	private void lookupAndSetViewElements() {
 		bGoBack = (Button) findViewById(R.id.go_back);
-		bNewPost = (ImageButton) findViewById(R.id.post_new);
+		bFollow = (Button) findViewById(R.id.follow);
+		bCreatePost = (ImageButton) findViewById(R.id.post_new);
 		tRefresh = (TextView) findViewById(R.id.refresh);
 		tPlaceName = (TextView) findViewById(R.id.place_name);
 		tPlaceName.setText(placeName);
 		tPlaceDesc = (TextView) findViewById(R.id.place_desc);
 		tPlaceDesc.setText(placeDesc);
+		bFollow.setVisibility(View.INVISIBLE); // show it until know if user already followed or not
 	}
 }

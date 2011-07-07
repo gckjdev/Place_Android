@@ -8,6 +8,7 @@ import android.util.Log;
 import com.orange.place.constant.DBConstants;
 import com.orange.place.constant.ServiceConstant;
 import com.orange.place.constants.Constants;
+import com.orange.utils.UriUtil;
 
 public class UriHelper {
 	private static final String LOG_CREATED_URI = "Created uri: ";
@@ -21,14 +22,14 @@ public class UriHelper {
 	public static Uri createRegUri(String loginId, String deviceId) {
 		Uri.Builder uriBase = getHttpBaseUriBuilder();
 
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_REGISTRATION);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_DEVICEMODEL, Build.MODEL);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_DEVICEOS, Constants.OS + ":" + Build.VERSION.SDK_INT);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_LOGINIDTYPE, String.valueOf(DBConstants.LOGINID_OWN));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_LOGINID, loginId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_NICKNAME, loginId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_DEVICEID, deviceId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_REGISTRATION);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_DEVICEMODEL, Build.MODEL);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_DEVICEOS, Constants.OS + ":" + Build.VERSION.SDK_INT);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_LOGINIDTYPE, String.valueOf(DBConstants.LOGINID_OWN));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_LOGINID, loginId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_NICKNAME, loginId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_DEVICEID, deviceId);
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, "Created uri for registration: " + uri.toString());
@@ -38,10 +39,10 @@ public class UriHelper {
 	public static Uri createDeviceLoginUri(String deviceId) {
 		Builder uriBase = getHttpBaseUriBuilder();
 
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_DEVICELOGIN);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_DEVICEID, deviceId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_NEED_RETURN_USER, "1");
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_DEVICELOGIN);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_DEVICEID, deviceId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_NEED_RETURN_USER, "1");
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, "Created uri for registration: " + uri.toString());
@@ -50,22 +51,46 @@ public class UriHelper {
 
 	public static Uri createGetRelatedPostsUri(String userId, String postId) {
 		Builder uriBase = getHttpBaseUriBuilder();
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETPOSTRELATEDPOST);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_POSTID, postId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_GETPOSTRELATEDPOST);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_POSTID, postId);
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
 		return uri;
 	}
 
+	public static Uri createUnfollowPlaceUri(String userId, String placeId) {
+		Builder uriBase = getHttpBaseUriBuilder();
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_USERFOLLOWPLACE);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_PLACEID, placeId);
+		
+		Uri uri = uriBase.build();
+		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
+		return uri;
+	}
+
+	public static Uri createFollowPlaceUri(String userId, String placeId) {
+		Builder uriBase = getHttpBaseUriBuilder();
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_USERUNFOLLOWPLACE);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_PLACEID, placeId);
+		
+		Uri uri = uriBase.build();
+		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
+		return uri;
+	}
+	
 	public static Uri createGetPlacePostsUri(String userId, String placeId) {
 		Builder uriBase = getHttpBaseUriBuilder();
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETPLACEPOST);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_PLACEID, placeId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_GETPLACEPOST);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_PLACEID, placeId);
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
@@ -74,11 +99,11 @@ public class UriHelper {
 
 	public static Uri createGetNearbyPostsUri(String userId, double longtitude, double latitude) {
 		Builder uriBase = getHttpBaseUriBuilder();
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETNEARBYPOSTS);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_LONGTITUDE, String.valueOf(longtitude));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_GETNEARBYPOSTS);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_LONGTITUDE, String.valueOf(longtitude));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
@@ -87,9 +112,9 @@ public class UriHelper {
 
 	public static Uri createGetFollowedPostsUri(String userId) {
 		Builder uriBase = getHttpBaseUriBuilder();
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETUSERFOLLOWPOSTS);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_GETUSERFOLLOWPOSTS);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
@@ -98,9 +123,9 @@ public class UriHelper {
 
 	public static Uri createGetRepliedPostsUri(String userId) {
 		Builder uriBase = getHttpBaseUriBuilder();
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETMYPOSTS);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_GETMEPOST);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
@@ -110,9 +135,9 @@ public class UriHelper {
 	public static Uri createGetFollowedPlacesUri(String userId) {
 		Builder uriBase = getHttpBaseUriBuilder();
 
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETUSERFOLLOWPLACE);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_GETUSERFOLLOWPLACE);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
@@ -122,53 +147,53 @@ public class UriHelper {
 	public static Uri createGetNearbyPlacesUri(String userId, double longitude, double latitude) {
 		Builder uriBase = getHttpBaseUriBuilder();
 
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_GETNEARBYPLACE);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_LONGTITUDE, String.valueOf(longitude));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_GETNEARBYPLACE);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_LONGTITUDE, String.valueOf(longitude));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
 		return uri;
 	}
 
-	public static Uri createNewPostUri(String userId, String placeId, String postContent, double longitude,
+	public static Uri createPostUri(String userId, String placeId, String postContent, double longitude,
 			double latitude, int contentType, String syncSns, String srcPostId, String replyPostId) {
 		Builder uriBase = getHttpBaseUriBuilder();
 
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_CREATEPOST);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_PLACEID, placeId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_LONGTITUDE, String.valueOf(longitude));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USER_LONGITUDE, String.valueOf(longitude));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USER_LATITUDE, String.valueOf(latitude));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_TEXT_CONTENT, postContent);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_CONTENT_TYPE, String.valueOf(contentType));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_SYNC_SNS, syncSns);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_SRC_POSTID, srcPostId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_REPLY_POSTID, replyPostId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_CREATEPOST);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_PLACEID, placeId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_LONGTITUDE, String.valueOf(longitude));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USER_LONGITUDE, String.valueOf(longitude));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USER_LATITUDE, String.valueOf(latitude));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_TEXT_CONTENT, postContent);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_CONTENT_TYPE, String.valueOf(contentType));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_SYNC_SNS, syncSns);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_SRC_POSTID, srcPostId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_REPLY_POSTID, replyPostId);
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());
 		return uri;
 	}
 
-	public static Uri createNewPlacesUri(String userId, String placeName, String placeDesc, double longitude,
+	public static Uri createPlaceUri(String userId, String placeName, String placeDesc, double longitude,
 			double latitude, double radius, String postType) {
 		Builder uriBase = getHttpBaseUriBuilder();
 
-		uriBase.appendQueryParameter(ServiceConstant.METHOD, ServiceConstant.METHOD_CREATEPLACE);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_APPID, Constants.APP_NAME);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_USERID, userId);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_LONGTITUDE, String.valueOf(longitude));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_NAME, placeName);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_RADIUS, String.valueOf(radius));
-		uriBase.appendQueryParameter(ServiceConstant.PARA_POSTTYPE, postType);
-		uriBase.appendQueryParameter(ServiceConstant.PARA_DESC, placeDesc);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.METHOD, ServiceConstant.METHOD_CREATEPLACE);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_APPID, Constants.APP_NAME);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_USERID, userId);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_LONGTITUDE, String.valueOf(longitude));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_LATITUDE, String.valueOf(latitude));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_NAME, placeName);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_RADIUS, String.valueOf(radius));
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_POSTTYPE, postType);
+		UriUtil.appendQueryParameter(uriBase, ServiceConstant.PARA_DESC, placeDesc);
 
 		Uri uri = uriBase.build();
 		Log.d(Constants.LOG_TAG, LOG_CREATED_URI + uri.toString());

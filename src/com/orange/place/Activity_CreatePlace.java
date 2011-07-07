@@ -13,7 +13,7 @@ import com.orange.place.tasks.PlaceTask;
 import com.orange.utils.ActivityUtil;
 import com.orange.utils.LocationUtil;
 
-public class Activity_NewPlace extends Activity {
+public class Activity_CreatePlace extends Activity {
 
 	private Button bCreate;
 	private EditText ePlaceName;
@@ -35,11 +35,11 @@ public class Activity_NewPlace extends Activity {
 		bCreate.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				int resultCode = PlaceTask.newPlace(Activity_NewPlace.this, ePlaceName.getText().toString(), ePlaceDesc.getText()
-						.toString(), LocationUtil.getCurrentLocation(Activity_NewPlace.this), 100, "0");
+				int resultCode = PlaceTask.newPlace(Activity_CreatePlace.this, ePlaceName.getText().toString(), ePlaceDesc.getText()
+						.toString(), LocationUtil.getCurrentLocation(Activity_CreatePlace.this), 100, "0");
 				if (resultCode == ErrorCode.ERROR_SUCCESS) {
-					Toast.makeText(Activity_NewPlace.this, getString(R.string.create_place_success), Toast.LENGTH_LONG).show();
-					Activity_NewPlace.this.finish();
+					Toast.makeText(Activity_CreatePlace.this, getString(R.string.create_place_success), Toast.LENGTH_LONG).show();
+					Activity_CreatePlace.this.finish();
 				} else {
 					tErrorInfo.setText("Create place failed, errorCode=" + resultCode);
 				}
