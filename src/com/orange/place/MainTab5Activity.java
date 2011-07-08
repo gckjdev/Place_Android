@@ -105,7 +105,8 @@ public class MainTab5Activity extends Activity {
 		bGetSinaUserInfo.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				JSONObject userJSON = snsService.getUserInfo(sinaRequest);				
+				JSONObject userJSON = snsService.getUserInfo(sinaRequest);		
+				Log.d(UtilConstants.LOG_TAG, "User Data="+userJSON.toString());
 			}
 		});
 		
@@ -139,14 +140,14 @@ public class MainTab5Activity extends Activity {
 			@Override
 			public void onClick(View v) {
 				JSONObject userJSON = snsService.getUserInfo(qqRequest);
+				Log.d(UtilConstants.LOG_TAG, "User Data="+userJSON.toString());
 			}
 		});
 	}
 	
 	@Override
 	protected void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
-		
+		super.onNewIntent(intent);		
 		Log.i(UtilConstants.LOG_TAG, intent.getData().getQuery());
 	} 
 	

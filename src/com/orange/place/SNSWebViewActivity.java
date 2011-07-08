@@ -7,6 +7,7 @@ import com.orange.place.constants.Constants;
 import com.orange.sns.qqweibo.QQWeiboSNSRequest;
 import com.orange.sns.service.SNSService;
 import com.orange.sns.sina.SinaSNSRequest;
+import com.orange.utils.ActivityUtil;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -68,6 +69,9 @@ public class SNSWebViewActivity extends Activity {
 	public void onCreate(Bundle savedInstanceState) {
 
 		super.onCreate(savedInstanceState);
+		
+		ActivityUtil.setNoTitle(this);
+		ActivityUtil.setFullScreen(this);
 		setContentView(R.layout.activity_sns_webview);
 
 		WebView webview = (WebView) findViewById(R.id.snswebview);
