@@ -135,7 +135,7 @@ public class Activity_PlacePosts extends BetterListActivity {
 	public void updateFollowButton() {
 		checkUserFollowedPlace();
 		if (userFollowedPlace) {
-			bFollow.setText(getString(R.string.unfollow));
+//			bFollow.setText(getString(R.string.unfollow));
 			bFollow.setVisibility(View.VISIBLE);
 		} else {
 			bFollow.setText(getString(R.string.follow));

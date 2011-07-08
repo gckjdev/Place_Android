@@ -17,7 +17,16 @@
 		<Button android:id="@+id/cleanup_place_list" android:text="cleanup place list"
 			android:layout_width="wrap_content" android:layout_height="wrap_content" />
 	</LinearLayout>
-	<Button android:text="@string/LOGIN_SINA" android:layout_height="wrap_content" android:layout_width="wrap_content" android:id="@+id/button_sina_login"></Button>
-	<Button android:text="发送微博消息" android:id="@+id/button_send_weibo" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+	<LinearLayout android:id="@+id/linearLayout1" android:layout_height="wrap_content" android:layout_width="fill_parent">
+		<Button android:text="发送新浪微博消息" android:layout_height="wrap_content" android:id="@+id/button_send_weibo" android:layout_width="wrap_content"></Button>
+		<Button android:text="@string/LOGIN_SINA" android:layout_height="wrap_content" android:id="@+id/button_sina_login" android:layout_width="wrap_content"></Button>
+	</LinearLayout>
+	<Button android:text="获取新浪微博用户信息" android:layout_height="wrap_content" android:id="@+id/button_get_sina_weibo_info" android:layout_width="wrap_content"></Button>
+	<LinearLayout android:id="@+id/linearLayout2" android:layout_height="wrap_content" android:layout_width="fill_parent">
+		<Button android:text="登录腾讯微博" android:layout_height="wrap_content" android:id="@+id/button_qq_login" android:layout_width="wrap_content"></Button>
+		<Button android:text="发送腾讯微博消息" android:layout_height="wrap_content" android:id="@+id/button_send_qq_weibo" android:layout_width="wrap_content"></Button>
+	</LinearLayout>
+	<Button android:text="获取腾讯微博用户信息" android:id="@+id/button_get_qq_weibo_info" android:layout_width="wrap_content" android:layout_height="wrap_content"></Button>
+
 
 </LinearLayout>

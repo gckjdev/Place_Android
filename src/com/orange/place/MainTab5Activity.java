@@ -3,6 +3,8 @@ package com.orange.place;
 import java.io.UnsupportedEncodingException;
 import java.security.GeneralSecurityException;
 
+import org.json.JSONObject;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -14,10 +16,12 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.orange.place.constant.DBConstants;
 import com.orange.place.constants.Constants;
 import com.orange.place.helper.SqlLiteHelper;
+import com.orange.sns.qqweibo.QQWeiboSNSRequest;
 import com.orange.sns.service.SNSService;
 import com.orange.sns.sina.SinaSNSRequest;
 import com.orange.utils.ActivityUtil;
@@ -27,6 +31,7 @@ public class MainTab5Activity extends Activity {
 
 	SNSService snsService = new SNSService();
 	SinaSNSRequest sinaRequest = new SinaSNSRequest();
+	QQWeiboSNSRequest qqRequest = new QQWeiboSNSRequest();
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -83,29 +88,21 @@ public class MainTab5Activity extends Activity {
 				sinaRequest.setAppSecret("9391125674c00f84022a4ab191f5a392");
 //				sinaRequest.setAppKey("1528146353");
 //				sinaRequest.setAppSecret("4815b7938e960380395e6ac1fe645a5c");
-				sinaRequest.setCallbackURL("dipan://MainTab5Activity");
-				try {
-					snsService.startAuthorization(sinaRequest);
-					String url = snsService.getAuthorizeURL(sinaRequest);
+//				sinaRequest.setCallbackURL("dipan://MainTab5Activity");
+				snsService.startAuthorization(sinaRequest);
+				String url = snsService.getAuthorizeURL(sinaRequest);
 
-					// open URL by browser
-					/*
-					Intent i = new Intent(Intent.ACTION_VIEW);
-					i.setData(Uri.parse(url));
-					startActivity(i);
-					*/					
-					Intent intent = new Intent(MainTab5Activity.this, SNSWebViewActivity.class);
-					Bundle b = new Bundle();
-					b.putString("url", url);
-					intent.putExtras(b);
-					startActivityForResult(intent, 0);
-					
-					
-				} catch (UnsupportedEncodingException e) {
-					e.printStackTrace();
-				} catch (GeneralSecurityException e) {
-					e.printStackTrace();
-				}		
+				// open URL by browser
+				/*
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(url));
+				startActivity(i);
+				*/					
+				Intent intent = new Intent(MainTab5Activity.this, SNSWebViewActivity.class);
+				Bundle b = new Bundle();
+				b.putString("url", url);
+				intent.putExtras(b);
+				startActivityForResult(intent, 0);		
 
 			}
 		});
@@ -114,7 +111,62 @@ public class MainTab5Activity extends Activity {
 		bSendWeibo.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				snsService.sendWeibo(sinaRequest, "为什么我是我，为什么我只能感觉到我，我死后是什么样子，我的感觉又会哪里去？");
+				snsService.sendWeibo(sinaRequest, "畅想人生，劲爆微博");
+			}
+		});
+		
+		Button bGetSinaUserInfo = (Button)findViewById(R.id.button_get_sina_weibo_info);
+		bGetSinaUserInfo.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				JSONObject userJSON = snsService.getUserInfo(sinaRequest);
+				
+//				Toast.makeText(MainTab5Activity.this, userJSON.get("screen_name"), 5);
+			}
+		});
+		
+		Button buttonQQLogin = (Button) findViewById(R.id.button_qq_login);
+		buttonQQLogin.setOnClickListener(new Button.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				qqRequest.setAppKey("a91a42c67bc940b68f75fe885c4a03bc");
+				qqRequest.setAppSecret("dd56c4565e5f22affb4aa839fadfc9c2");
+				qqRequest.setCallbackURL("null");
+				if (snsService.startAuthorization(qqRequest) == false)
+					return;
+
+				String url = snsService.getAuthorizeURL(qqRequest);
+
+				// open URL by browser
+				/*
+				Intent i = new Intent(Intent.ACTION_VIEW);
+				i.setData(Uri.parse(url));
+				startActivity(i);
+				*/					
+				Intent intent = new Intent(MainTab5Activity.this, SNSWebViewActivity.class);
+				Bundle b = new Bundle();
+				b.putString("url", url);
+				intent.putExtras(b);
+				startActivityForResult(intent, 0);		
+
+			}
+		});
+		
+		Button bSendQQWeibo = (Button)findViewById(R.id.button_send_qq_weibo);
+		bSendQQWeibo.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				snsService.sendWeibo(qqRequest, "畅想人生，劲爆腾讯微博");
+			}
+		});
+		
+		Button bGetQQUserInfo = (Button)findViewById(R.id.button_get_qq_weibo_info);
+		bGetQQUserInfo.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				JSONObject userJSON = snsService.getUserInfo(qqRequest);
+				
+//				Toast.makeText(MainTab5Activity.this, userJSON.get("screen_name"), 5);
 			}
 		});
 	}
@@ -132,7 +184,10 @@ public class MainTab5Activity extends Activity {
 		if (bundle != null){
 			String pin = (String) bundle.get("PIN");
 			if (pin != null){
-				snsService.getAccessToken(sinaRequest, pin);
+				if (resultCode == 0)
+					snsService.getAccessToken(sinaRequest, pin);
+				else
+					snsService.getAccessToken(qqRequest, pin);
 			}
 		}
 		

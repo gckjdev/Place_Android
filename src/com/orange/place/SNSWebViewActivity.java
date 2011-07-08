@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.orange.place.constants.Constants;
+import com.orange.sns.sina.SinaSNSRequest;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -27,6 +28,7 @@ public class SNSWebViewActivity extends Activity {
 	}
 	
 	String pin = null;
+	int requestFrom;		// 0 : sina, 1 : QQ
 
 	class JavaScriptInterface {
 		public void getHTML(String html) {
@@ -38,7 +40,7 @@ public class SNSWebViewActivity extends Activity {
 			// return the previous activity
 			Bundle bundle = new Bundle();
 	        bundle.putString("PIN", pin);
-	        SNSWebViewActivity.this.setResult(0, SNSWebViewActivity.this.getIntent().putExtras(bundle)); 
+	        SNSWebViewActivity.this.setResult(requestFrom, SNSWebViewActivity.this.getIntent().putExtras(bundle)); 
 			SNSWebViewActivity.this.finish();
 
 		}
@@ -56,10 +58,23 @@ public class SNSWebViewActivity extends Activity {
 			@Override
 			public void onPageFinished(WebView view, String url) {
 				Log.i(Constants.LOG_TAG, url);
-				if(url.equals("http://api.t.sina.com.cn/oauth/authorize")){
+				if(url.equals(SinaSNSRequest.SINA_AUTHORIZE_URL)){
 				
 					view
 						.loadUrl("javascript:window.Methods.getHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+					super.onPageFinished(view, url);
+					
+					requestFrom = 0;	// sina
+				}
+				else if (url.contains("http://open.t.qq.com/oauth_html/mobile.php?type=3&code=0&v=")){
+					view
+					.loadUrl("javascript:window.Methods.getHTML('<head>'+document.getElementsByTagName('html')[0].innerHTML+'</head>');");
+				super.onPageFinished(view, url);
+				
+					requestFrom = 1; // QQ
+										
+				}
+				else{
 					super.onPageFinished(view, url);
 				}
 
