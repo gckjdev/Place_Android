@@ -86,24 +86,10 @@ public class MainTab5Activity extends Activity {
 			public void onClick(View v) {
 				sinaRequest.setAppKey("637805385");
 				sinaRequest.setAppSecret("9391125674c00f84022a4ab191f5a392");
-//				sinaRequest.setAppKey("1528146353");
-//				sinaRequest.setAppSecret("4815b7938e960380395e6ac1fe645a5c");
-//				sinaRequest.setCallbackURL("dipan://MainTab5Activity");
 				snsService.startAuthorization(sinaRequest);
 				String url = snsService.getAuthorizeURL(sinaRequest);
-
-				// open URL by browser
-				/*
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setData(Uri.parse(url));
-				startActivity(i);
-				*/					
-				Intent intent = new Intent(MainTab5Activity.this, SNSWebViewActivity.class);
-				Bundle b = new Bundle();
-				b.putString("url", url);
-				intent.putExtras(b);
-				startActivityForResult(intent, 0);		
-
+				SNSWebViewActivity.loadActivity(MainTab5Activity.this, 
+						url, SNSWebViewActivity.REQUEST_FROM_SINA);
 			}
 		});
 		
@@ -119,9 +105,7 @@ public class MainTab5Activity extends Activity {
 		bGetSinaUserInfo.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				JSONObject userJSON = snsService.getUserInfo(sinaRequest);
-				
-//				Toast.makeText(MainTab5Activity.this, userJSON.get("screen_name"), 5);
+				JSONObject userJSON = snsService.getUserInfo(sinaRequest);				
 			}
 		});
 		
@@ -136,18 +120,8 @@ public class MainTab5Activity extends Activity {
 					return;
 
 				String url = snsService.getAuthorizeURL(qqRequest);
-
-				// open URL by browser
-				/*
-				Intent i = new Intent(Intent.ACTION_VIEW);
-				i.setData(Uri.parse(url));
-				startActivity(i);
-				*/					
-				Intent intent = new Intent(MainTab5Activity.this, SNSWebViewActivity.class);
-				Bundle b = new Bundle();
-				b.putString("url", url);
-				intent.putExtras(b);
-				startActivityForResult(intent, 0);		
+				SNSWebViewActivity.loadActivity(MainTab5Activity.this, 
+						url, SNSWebViewActivity.REQUEST_FROM_QQ);
 
 			}
 		});
@@ -165,8 +139,6 @@ public class MainTab5Activity extends Activity {
 			@Override
 			public void onClick(View v) {
 				JSONObject userJSON = snsService.getUserInfo(qqRequest);
-				
-//				Toast.makeText(MainTab5Activity.this, userJSON.get("screen_name"), 5);
 			}
 		});
 	}
@@ -180,16 +152,6 @@ public class MainTab5Activity extends Activity {
 	
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent intent) { 
-		Bundle bundle = intent.getExtras();
-		if (bundle != null){
-			String pin = (String) bundle.get("PIN");
-			if (pin != null){
-				if (resultCode == 0)
-					snsService.getAccessToken(sinaRequest, pin);
-				else
-					snsService.getAccessToken(qqRequest, pin);
-			}
-		}
-		
+		SNSWebViewActivity.loadActivityFinish(intent, snsService, sinaRequest, qqRequest);		
 	}
 }
