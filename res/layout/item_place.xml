@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-	android:layout_width="wrap_content" android:layout_height="wrap_content"
+	android:layout_width="wrap_content" android:layout_height="55dip"
 	android:layout_alignParentLeft="true" android:layout_weight="1"
 	android:orientation="vertical" android:layout_margin="8dip">
 	<TextView android:id="@+id/place_name" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:maxLines="1"
 		android:ellipsize="marquee" android:textColor="@android:color/black"
-		android:textSize="20sp" />
+		android:textSize="15sp" 
+		android:padding="5dip"/>
 	<TextView android:id="@+id/place_desc" android:layout_width="wrap_content"
 		android:layout_height="wrap_content" android:maxLines="1"
 		android:layout_alignParentLeft="true" android:ellipsize="marquee"
-		android:textColor="@android:color/black" android:textSize="15sp" />
+		android:textColor="@android:color/black" android:textSize="10sp" 
+				android:padding="5dip"/>
 </LinearLayout> 
